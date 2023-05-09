@@ -13,24 +13,26 @@
         android:id="@+id/imageView4"
         android:layout_width="255dp"
         android:layout_height="134dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="170dp"
         android:layout_weight="1"
         app:srcCompat="@drawable/character_mmb" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
-        android:layout_height="54dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:layout_weight="1"
-        android:gravity="center"
         android:text="답변이 보이는 부분"
-        android:textAlignment="textStart"
-        android:textColor="@color/grey" />
+        android:textColor="@color/grey"
+        android:textSize="24sp" />
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="50dp"
-        app:srcCompat="@drawable/icon_setting" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/icon_speak"
+        android:scaleType="centerCrop" />
 </LinearLayout>
