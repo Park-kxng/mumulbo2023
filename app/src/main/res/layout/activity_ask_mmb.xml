@@ -4,28 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:gravity="center">
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="72dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_width="255dp"
+        android:layout_height="134dp"
+        android:layout_marginTop="60dp"
         android:layout_weight="1"
         app:srcCompat="@drawable/character_mmb" />
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="390dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
         android:layout_weight="1"
-        android:text="무물보에게 물어보기" />
+        android:gravity="center"
+        android:text="답변이 보이는 부분"
+        android:textAlignment="textStart"
+        android:textColor="@color/grey" />
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="425dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="50dp"
         app:srcCompat="@drawable/icon_setting" />
 </LinearLayout>
