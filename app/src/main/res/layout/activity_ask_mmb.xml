@@ -9,6 +9,14 @@
     android:layout_marginRight="20dp"
     android:gravity="center">
 
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_weight="1"
+        android:text="녹음 중? NO" />
+
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="255dp"
@@ -16,6 +24,16 @@
         android:layout_marginTop="170dp"
         android:layout_weight="1"
         app:srcCompat="@drawable/character_mmb" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/black"
+        android:ems="10"
+        android:inputType="text"
+        android:text="" />
 
     <TextView
         android:id="@+id/textView3"
@@ -25,7 +43,7 @@
         android:layout_marginBottom="30dp"
         android:layout_weight="1"
         android:text="답변이 보이는 부분"
-        android:textColor="@color/grey"
+        android:textColor="@color/black"
         android:textSize="24sp" />
 
     <ImageButton

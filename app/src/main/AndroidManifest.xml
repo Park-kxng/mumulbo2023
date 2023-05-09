@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- 1. 물어보기 관련 퍼미션 : STT, TTS, ChatGPT-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 2. 관련 퍼미션 : -->
+
+    <!-- 3. 원격 관련 퍼미션 : -->
 
     <application
         android:allowBackup="true"
