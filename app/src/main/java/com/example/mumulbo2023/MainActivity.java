@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         Button button_please =  (Button) findViewById(R.id.button_please);
 
         // 접근 권한 요청, 권한을 부여할 권한 지정하는 부분
-        // 이미지들 가져올 것이라 외부 저장소 읽는 것 권한 받기
+        // Manifest에 퍼미션 추가하고 여기에다가 권한 필요한거 싹다 집어넣으면 된다
         String[] permissions = {
                 //android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 //android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
