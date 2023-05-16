@@ -3,6 +3,9 @@ package com.example.mumulbo2023;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.renderscript.Sampler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -14,8 +17,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+// 챗 지피티
+import okhttp3.*;
 
 public class AskMmbActivity extends Activity {
     ImageButton recordButton; // STT 시작 및 종료하는 버튼
@@ -32,7 +48,23 @@ public class AskMmbActivity extends Activity {
 
 
     // Chat GPT 관련
+    Handler handler = new Handler(Looper.getMainLooper());
+    String temp ="";
+    String question = "";
+
+    boolean answer = false;  //현재 녹음중인지 여부
+
     String gptTTS=""; // GPT 검색 결과
+    String result_copy ="";
+
+    public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    OkHttpClient client = new OkHttpClient().newBuilder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .build();
+
+    private static final String MY_SECRET_KEY = "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";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,9 +75,11 @@ public class AskMmbActivity extends Activity {
         // 객체 생성
         recordButton = findViewById(R.id.imageButton);
         faceImage = findViewById(R.id.imageView4);
-        answerText = findViewById(R.id.textView3);
+        answerText = findViewById(R.id.speakText); // ▶ 챗 지피티 답변을 받는 변수
         recordingText = findViewById(R.id.textView6); // ▶ 녹음 중인지 확인 용도 나중에 빼도 됨
         editText = findViewById(R.id.editText); // ▶ STT 잘 되고 있는지 확인 용도 최종 결과에선 삭제해도 됨
+        // 챗 지피티 관련 객체 생성
+
 
         /* STT  */
         recordIntent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -54,31 +88,47 @@ public class AskMmbActivity extends Activity {
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!recording) {   //녹음 시작
-                    recording = true;
-                    startRecord();
-                    Toast.makeText(getApplicationContext(), "지금부터 무엇이든 물어보세요!", Toast.LENGTH_SHORT).show();
-                    recordingText.setText("녹음중? YES");
-                    // 기존에 있던 애들 초기화
-                    answerText.setText("");
-                    editText.setText("");
-                    userSTT ="";
-                    gptTTS = "";
-                }
-                else {  //이미 녹음 중이면 녹음 중지
-                    recording = false;
-                    stopRecord();
-                    recordingText.setText("녹음중? NO");
-                    // TTS 테스트용으로 녹음 종료시 녹음된걸 말해주는거 넣어둠
-                    gptTTS = editText.getText().toString(); // gpt로 받은 text를 여기에 넣어주면 됨
+                if (!answer){ // 챗 지피티 답변 시작
+                    question = editText.getText().toString();  // 물어본 답변은 저장합니다.
+                    //챗 지피티에게 물어보고 답변을 gptTTS에 저장합니다.
+                    System.out.println(question);
+                    gptTTS = callAPI("이 핸드폰의 기종은 안드로이드입니다"+question);
+                    Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_SHORT).show();
+                    System.out.println("gptTTS : "+ gptTTS);
+
+                    System.out.println("temp : "+temp);
                     textToSpeech.setPitch(1.0f); // 높낮이
                     textToSpeech.setSpeechRate(1.0f); // 바르기
                     textToSpeech.speak(gptTTS, TextToSpeech.QUEUE_FLUSH, null);
                     answerText.setText(gptTTS); // 답변 부분에 출력
-                    ///////
+                    answer = true; // 챗 지피티가 답변을 완료하였습니다.
                 }
+                else{ // 녹음 시작
+                    if (!recording) {   //녹음 시작
+                        recording = true;
+                        startRecord();
+                        Toast.makeText(getApplicationContext(), "지금부터 무엇이든 물어보세요!", Toast.LENGTH_SHORT).show();
+                        recordingText.setText("녹음중? YES");
+                        // 기존에 있던 애들 초기화
+                        answerText.setText("");
+                        editText.setText("");
+                        userSTT ="";
+                        gptTTS = "";
+                    }
+                    else {  //이미 녹음 중이면 녹음 중지
+                        recording = false;
+                        stopRecord();
+                        recordingText.setText("녹음중? NO");
+                        // TTS 테스트용으로 녹음 종료시 녹음된걸 말해주는거 넣어둠
+                        question = editText.getText().toString();  // 물어본 답변은 저장합니다.
+                        answer = false; // 챗 지피티가 답변을 해야 한다는 표시
+
+                    }
+                }
+
             }
-        });
+        }
+        );
 
         /* TTS  */
         // TTS 객체 초기화
@@ -194,7 +244,7 @@ public class AskMmbActivity extends Activity {
                 userSTT += matches.get(i);
             }
 
-            editText.setText(userSTT );	//기존의 text에 인식 결과 보여
+            editText.setText(userSTT);	//기존의 text에 인식 결과 보여
             speechRecognizer.startListening(recordIntent);    //녹음버튼을 누를 때까지 계속 녹음해야 하므로 녹음 재개
         }
 
@@ -218,4 +268,77 @@ public class AskMmbActivity extends Activity {
         }
         super.onDestroy();
     }
+
+    String callAPI(String question){
+        //okhttp
+        // 챗 지피티가 답변하기 전, 말할 부분을 표시하기 위해 원래 있던 부분을 초기화합니다.
+        editText.setText("");
+        //추가된 내용
+        JSONArray arr = new JSONArray();
+        JSONObject baseAi = new JSONObject();
+        JSONObject userMsg = new JSONObject();
+        try {
+            //AI 속성설정
+            baseAi.put("role", "user");
+            baseAi.put("content", "You are a helpful and kind AI Assistant.");
+            //유저 메세지
+            userMsg.put("role", "user");
+            userMsg.put("content", question);
+            //array로 담아서 한번에 보낸다
+            arr.put(baseAi);
+            arr.put(userMsg);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        //
+        JSONObject object = new JSONObject();
+        try {
+            object.put("model", "gpt-3.5-turbo");
+            object.put("messages", arr);
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        RequestBody body = RequestBody.create(object.toString(), JSON);
+        Request request = new Request.Builder()
+                .url("https://api.openai.com/v1/chat/completions")
+                .header("Authorization", "Bearer "+MY_SECRET_KEY)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Toast.makeText(getApplicationContext(), "에러가 발생하였습니다. : " , Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()){
+                    JSONObject jsonObject = null;
+                    try {
+                        //아래 body().toString()이 아니라 .string() 주의
+                        jsonObject = new JSONObject(response.body().string());
+                        JSONArray jsonArray = jsonObject.getJSONArray("choices");
+                        JSONObject value = jsonArray.getJSONObject(0).getJSONObject("message");
+                        result_copy = value.getString("content");
+                        //Toast.makeText(getApplicationContext(), result.trim(), Toast.LENGTH_SHORT).show();
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                } else {
+                    addResponse("Failed to load response due to "+response.body().string());
+                    result_copy = response.body().string();
+
+
+                }
+            }
+        });
+        return result_copy;
+    }
+    void addResponse(String response){
+        temp = response;
+    }
+
+
+
 }

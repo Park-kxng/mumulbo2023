@@ -16,18 +16,26 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+<<<<<<< HEAD
 
     String phoneNo;
     String sms;
 
 
+=======
+    // 연락처는 여기에서 관리됨. static으로 여러곳에서 접근.
+    public static ArrayList<OnePerson> personArrayList;
+>>>>>>> 4dff938f0ba131fd704b0001771594981ffe92f9
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        personArrayList = new ArrayList<>();
+
         Button button_ask =  (Button) findViewById(R.id.button_ask);
         Button button_act =  (Button) findViewById(R.id.button_act);
         Button button_please =  (Button) findViewById(R.id.button_please);
+        Button addPersonMenuButton = (Button) findViewById(R.id.addPersonMenuButton);
 
         // 접근 권한 요청, 권한을 부여할 권한 지정하는 부분
         // Manifest에 퍼미션 추가하고 여기에다가 권한 필요한거 싹다 집어넣으면 된다
@@ -53,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Intent intent = new Intent(getApplicationContext(), ActMmbActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        addPersonMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AddPersonActivity.class);
                 startActivity(intent);
             }
         });
