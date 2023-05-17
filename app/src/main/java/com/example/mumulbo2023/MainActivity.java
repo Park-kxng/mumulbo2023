@@ -36,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
                 //android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 //android.Manifest.permission.INTERNET,
                 android.Manifest.permission.RECORD_AUDIO,
-                android.Manifest.permission.SEND_SMS
+                android.Manifest.permission.SEND_SMS,
+                android.Manifest.permission.SET_ALARM
         };
         checkPermissions(permissions); // 권한 허용할 것인지 물어보는 것 부분 함수
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView2"
@@ -9,4 +10,31 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="무물보에게 부탁하기" />
+    <TextView
+        android:id="@+id/infoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="다른 앱 열기 테스트 버튼" />
+
+    <Button
+        android:id="@+id/kakaoButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="카카오톡 연결" />
+
+    <Button
+        android:id="@+id/alarmButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="알람 연결" />
+
+    <Button
+        android:id="@+id/coupangButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="쿠팡 연결" />
 </LinearLayout>
