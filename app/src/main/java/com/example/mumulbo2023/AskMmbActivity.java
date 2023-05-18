@@ -53,7 +53,7 @@ public class AskMmbActivity extends Activity {
     String question = "";
 
     boolean answer = false;  //현재 녹음중인지 여부
-
+    boolean mmb_status = false; // 음성봇이 이야기는지 여부
     String gptTTS=""; // GPT 검색 결과
     String result_copy ="";
 
@@ -64,7 +64,7 @@ public class AskMmbActivity extends Activity {
             .readTimeout(60, TimeUnit.SECONDS)
             .build();
 
-    private static final String MY_SECRET_KEY = "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";
+    private static final String MY_SECRET_KEY = "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";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -74,7 +74,7 @@ public class AskMmbActivity extends Activity {
 
         // 객체 생성
         recordButton = findViewById(R.id.imageButton);
-        faceImage = findViewById(R.id.imageView4);
+        faceImage = findViewById(R.id.charc_mmb);
         answerText = findViewById(R.id.speakText); // ▶ 챗 지피티 답변을 받는 변수
         recordingText = findViewById(R.id.textView6); // ▶ 녹음 중인지 확인 용도 나중에 빼도 됨
         editText = findViewById(R.id.editText); // ▶ STT 잘 되고 있는지 확인 용도 최종 결과에선 삭제해도 됨
@@ -88,32 +88,50 @@ public class AskMmbActivity extends Activity {
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!answer){ // 챗 지피티 답변 시작
+                System.out.println("버튼을 클릭하였습니다.");
+                System.out.println(answer);
+
+                // answer == true -> 음성봇이 말해야 하는 경우
+                if (answer == true){ // 챗 지피티 답변 시작
+                    // 캐릭터의 얼굴을 웃는 얼굴로 변경합니다.
+                    faceImage.setImageResource(R.drawable.character_mmb_smile);
                     question = editText.getText().toString();  // 물어본 답변은 저장합니다.
                     //챗 지피티에게 물어보고 답변을 gptTTS에 저장합니다.
                     System.out.println(question);
-                    gptTTS = callAPI("이 핸드폰의 기종은 안드로이드입니다"+question);
+                    gptTTS = callAPI(question);
                     Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_SHORT).show();
                     System.out.println("gptTTS : "+ gptTTS);
-
                     System.out.println("temp : "+temp);
+                    System.out.println("answerText : "+answerText);
+                    answerText.setText(gptTTS); // 답변 부분에 출력
                     textToSpeech.setPitch(1.0f); // 높낮이
                     textToSpeech.setSpeechRate(1.0f); // 바르기
                     textToSpeech.speak(gptTTS, TextToSpeech.QUEUE_FLUSH, null);
-                    answerText.setText(gptTTS); // 답변 부분에 출력
-                    answer = true; // 챗 지피티가 답변을 완료하였습니다.
+                    answer = false; // 챗 지피티가 답변을 완료하였습니다.
+
+                    // 아이콘을 녹음 모양으로 변경합니다.
+                    recordButton.setImageResource(R.drawable.icon_speak);
+
                 }
-                else{ // 녹음 시작
+                // answer == false --> 사람이 말해야 하는 경우
+                else if(answer == false){
                     if (!recording) {   //녹음 시작
+                        //textToSpeech.stop();
+                        //textToSpeech.shutdown();
+
                         recording = true;
                         startRecord();
                         Toast.makeText(getApplicationContext(), "지금부터 무엇이든 물어보세요!", Toast.LENGTH_SHORT).show();
                         recordingText.setText("녹음중? YES");
+                        // 캐릭터의 얼굴을 무표정 얼굴로 변경합니다.
+                        faceImage.setImageResource(R.drawable.character_mmb);
+
                         // 기존에 있던 애들 초기화
                         answerText.setText("");
                         editText.setText("");
                         userSTT ="";
                         gptTTS = "";
+
                     }
                     else {  //이미 녹음 중이면 녹음 중지
                         recording = false;
@@ -121,10 +139,15 @@ public class AskMmbActivity extends Activity {
                         recordingText.setText("녹음중? NO");
                         // TTS 테스트용으로 녹음 종료시 녹음된걸 말해주는거 넣어둠
                         question = editText.getText().toString();  // 물어본 답변은 저장합니다.
-                        answer = false; // 챗 지피티가 답변을 해야 한다는 표시
+                        // 아이콘을 스피커 모양으로 변경합니다.
+                        recordButton.setImageResource(R.drawable.icon_speak_mmb);
+                        answer = true;
+
+
 
                     }
                 }
+
 
             }
         }
@@ -136,6 +159,7 @@ public class AskMmbActivity extends Activity {
             @Override
             public void onInit(int status) {
                 if(status!=android.speech.tts.TextToSpeech.ERROR) {
+
                     textToSpeech.setLanguage(Locale.KOREAN);
                 }
             }
@@ -273,16 +297,24 @@ public class AskMmbActivity extends Activity {
         //okhttp
         // 챗 지피티가 답변하기 전, 말할 부분을 표시하기 위해 원래 있던 부분을 초기화합니다.
         editText.setText("");
+
         //추가된 내용
         JSONArray arr = new JSONArray();
         JSONObject baseAi = new JSONObject();
         JSONObject userMsg = new JSONObject();
         try {
+
             //AI 속성설정
             baseAi.put("role", "user");
-            baseAi.put("content", "You are a helpful and kind AI Assistant.");
+            baseAi.put("content", "you are very kind AI assistant");
             //유저 메세지
             userMsg.put("role", "user");
+            String setting_message =  "당신은 아주 친절한 노인복지센터 직원으로 노인층에게 핸드폰 사용방법을 50자 이내로 간결하게 설명해주는 사람입니다."+
+                    "기본적인 사용 방법은 갤럭시 S10 을 기준으로 답변해주시고, 조작방법을 물어보는 경우 핸드폰 조작법 순서에 번호를 매겨서 답변해주십시오."+
+                    "번호를 매기는 방법은 숫자를 작성하고 )을 입력하여 순서 맨 앞에 번호를 매겨주세요. 예시는 '1) 메세지 앱을 클릭하세요. 2) 보낼 내용을 네모난 칸에 입력해주세요. 3) 전송 버튼을 누르세요.' 와 같습니다."+
+                    "모든 답변은 노인층이 이해하기 쉽게 풀어서 설명해주십시오. 노인복지센터로 오라는 답변은 하지 말아주세요. 또한, 50자 이내로 간결하게 답변해주세요.";
+            baseAi.put("content", setting_message);
+
             userMsg.put("content", question);
             //array로 담아서 한번에 보낸다
             arr.put(baseAi);
@@ -327,7 +359,7 @@ public class AskMmbActivity extends Activity {
                     }
                 } else {
                     addResponse("Failed to load response due to "+response.body().string());
-                    result_copy = response.body().string();
+                    result_copy = temp;
 
 
                 }
