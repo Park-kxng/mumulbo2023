@@ -103,5 +103,11 @@
                 android:layout_weight="1"
                 android:text="연락처관리" />
         </LinearLayout>
+        <Button
+            android:id="@+id/pky_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="박근영 test _ 다른 앱 접근" />
     </LinearLayout>
 </LinearLayout>

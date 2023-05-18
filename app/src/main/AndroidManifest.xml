@@ -34,6 +34,20 @@
         <activity android:name="com.example.mumulbo2023.PleaseActivity"></activity>
         <activity android:name="com.example.mumulbo2023.ActMmbActivity"></activity>
         <activity android:name="com.example.mumulbo2023.AskMmbActivity"></activity>
+        <activity android:name="com.example.mumulbo2023.PkyTestActivity"></activity>
+        <service
+            android:exported="true"
+            android:name=".CustomAccessibilityService"
+            android:label="Custom Accessibility Service"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
 
     </application>
 
