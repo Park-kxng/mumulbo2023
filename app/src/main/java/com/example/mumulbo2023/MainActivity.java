@@ -16,16 +16,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-<<<<<<< HEAD
 
     String phoneNo;
     String sms;
 
-
-=======
     // 연락처는 여기에서 관리됨. static으로 여러곳에서 접근.
     public static ArrayList<OnePerson> personArrayList;
->>>>>>> 4dff938f0ba131fd704b0001771594981ffe92f9
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

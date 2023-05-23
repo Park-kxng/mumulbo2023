@@ -6,12 +6,13 @@ public class OnePerson {
     String person_name; // 사람 이름
     String person_number; // 전화번호
 
+    public OnePerson() {
+    }
+
     public OnePerson(String person_name, String person_number){
         this.person_name = person_name;
         this.person_number = person_number;
     }
-
-
 
     public String getPerson_name() {
         return person_name;
