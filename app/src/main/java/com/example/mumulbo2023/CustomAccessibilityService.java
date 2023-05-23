@@ -2,15 +2,26 @@ package com.example.mumulbo2023;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.accessibilityservice.GestureDescription;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Path;
+import android.provider.Settings;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
+import java.util.List;
+import java.util.Locale;
+
 public class CustomAccessibilityService extends AccessibilityService {
     int Step = 0;
-
+    // TTS 텍스트를 음성으로 관련
+    TextToSpeech textToSpeech;
     @Override
     protected void onServiceConnected() {
         // 접근성 서비스가 연결되었을 때 호출됩니다.
@@ -22,6 +33,41 @@ public class CustomAccessibilityService extends AccessibilityService {
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_SPOKEN;
         setServiceInfo(info);
 
+        // TTS 객체 초기화
+        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status!=android.speech.tts.TextToSpeech.ERROR) {
+
+                    textToSpeech.setLanguage(Locale.KOREAN);
+                    textToSpeech.setPitch(1.0f); // 높낮이
+                    textToSpeech.setSpeechRate(1.0f); // 바르기
+                }
+            }
+        });
+
+        // 런처 말고 내부 앱 패키지 이름 가져오는 것 테스트
+        /*
+        String packageName = "com.kakao.talk";
+        try {
+            PackageManager packageManager = getPackageManager();
+            Intent launchIntent = packageManager.getLaunchIntentForPackage(packageName);
+            Log.d("Package Name", "=========packageName1=============");
+            if (launchIntent != null) {
+                ComponentName componentName = launchIntent.getComponent();
+                Log.d("Package Name", "=========packageName2=============");
+                if (componentName != null) {
+                    packageName = componentName.getPackageName();
+                    Log.d("Package Name", "=========packageName3=============");
+                    Log.d("Package Name", packageName);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Package Name", e.toString());
+        }
+        */
+        ////////
 
     }
 
@@ -41,12 +87,13 @@ public class CustomAccessibilityService extends AccessibilityService {
             Log.d("log3-1",packageName); // 현재 어떤 앱에 위치해 있는지 출력
 
         }
+        // TTS를 사용하고 싶다면 아래 한줄만 사용하면 됨. 매개변수 제일 첫번째에 String 말할거 넣으면 됨.
+        //textToSpeech.speak(packageName, TextToSpeech.QUEUE_FLUSH, null);
 
         //3.내가 지금 실행하고 있는 패키지가 카카오톡인 경우
         if("com.kakao.talk".equals(packageName)){
             // 예시. 친구 추가하기 버튼을 찾는 로직을 구현할 예정
             Log.d("log3","룰루랄라");
-
             sourceNode = event.getSource();
             if (sourceNode != null) {
                 Log.d("log3-2","친구추가 버튼 누르기");
@@ -65,12 +112,13 @@ public class CustomAccessibilityService extends AccessibilityService {
                 else {
                     String textToString = text.toString();
                     Log.d("log2-1", text.toString());
-
+                    textToSpeech.speak(textToString, TextToSpeech.QUEUE_FLUSH, null);
                     // 친구한테 카톡 보내기 1단계
                     if(Step==0){
                         if(textToString.contains("친구 탭")){
                             // 친구한테 카톡보내기 로직 실행
                             Log.d("log2-2", "친구한테 카톡 보내기 : 1단계");
+                            textToSpeech.speak("친구한테 카톡 보내기 : 1단계", TextToSpeech.QUEUE_FLUSH, null);
                             Step = 1;
                         }
                         else{

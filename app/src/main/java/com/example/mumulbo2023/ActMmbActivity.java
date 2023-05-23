@@ -490,7 +490,7 @@ public class ActMmbActivity extends Activity {
                 if (intent != null) {
                     // 카카오톡 앱이 설치되어 있는 경우 앱을 엽니다.
                     startActivity(intent);
-                    sendMessage();
+                    //sendMessage();
                 } else {
                     // 카카오톡 앱이 설치되어 있지 않은 경우 마켓으로 이동합니다.
                     Log.d("카카오톡 설치x", "카카오톡 설치되어 있지 않음 마켓으로 이동");

@@ -5,11 +5,27 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- 2. 관련 퍼미션 : -->
-    <uses-permission android:name="android.permission.SET_ALARM" />
 
+    <!-- 2. 관련 퍼미션 및 쿼리: -->
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <queries>
+        <package android:name="com.kakao.talk"/>
+        <package android:name="com.coupang.mobile"/>
+        <package android:name="com.google.android.youtube"/>
+        <package android:name="com.sec.android.gallery3d"/>
+        <package android:name="com.samsung.android.messaging"/>
+        <package android:name="com.skt.prod.dialer"/>
+        <package android:name="com.samsung.android.calendar"/>
+        <package android:name="com.nhn.android.nmap"/>
+        <package android:name="com.nhn.android.search"/>
+        <package android:name="com.sec.android.app.popupcalculator"/>
+
+    </queries>
     <!-- 3. 원격 관련 퍼미션 : -->
     <uses-permission android:name="android.permission.SEND_SMS" />
+
+
 
     <application
         android:allowBackup="true"
