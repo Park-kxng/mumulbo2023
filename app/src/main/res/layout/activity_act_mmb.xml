@@ -18,6 +18,27 @@
         android:layout_weight="1"
         android:text="녹음중? NO" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/infoTextView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="1. 접근성 서비스 연결 ▶" />
+
+        <Button
+            android:id="@+id/Acces_connection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="접근성 서비스 연결하기" />
+    </LinearLayout>
+
     <EditText
         android:id="@+id/sttEditText"
         android:layout_width="match_parent"
@@ -25,7 +46,7 @@
         android:layout_weight="1"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="STT 인식 부분" />
+        android:text="2. STT 인식 부분" />
 
     <Button
         android:id="@+id/sttButton"

@@ -39,7 +39,7 @@
         <service
             android:exported="true"
             android:name=".CustomAccessibilityService"
-            android:label="Custom Accessibility Service"
+            android:label="무엇이든 물어보세요"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />

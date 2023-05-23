@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.AlarmClock;
+import android.provider.Settings;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -38,7 +39,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class ActMmbActivity extends Activity {
-    Button kakaoButton, alarmButton, coupangButton, recordButton;
+    Button kakaoButton, alarmButton, coupangButton, recordButton, button_AccessConect;
     //////
     TextView recordingText; // TTS로 음성으로 나오기도 하지만 텍스트로도 표시하기 위함
     //TextView answerText;
@@ -56,12 +57,14 @@ public class ActMmbActivity extends Activity {
     Handler handler = new Handler(Looper.getMainLooper());
     String temp = "";
     String question = "";
-
     boolean answer = false;  //현재 녹음중인지 여부
     boolean mmb_status = false; // 음성봇이 이야기는지 여부
     String gptTTS = ""; // GPT 검색 결과
     String result_copy = "";
     private static final String TAG = "AppPackageNames";
+
+    // 접근성 서비스 관련
+    private static final int REQUEST_ACCESSIBILITY = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,8 @@ public class ActMmbActivity extends Activity {
         recordIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         recordIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
         recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");   //한국어
+        //
+        button_AccessConect = findViewById(R.id.Acces_connection);
         recordButton.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -232,10 +237,87 @@ public class ActMmbActivity extends Activity {
         });
 
 
+        // 접근성 서비스 관련
+        button_AccessConect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 접근성 서비스 연결하기 버튼을 누른 경우
+
+                // 접근성 서비스가 활성화되어 있는 경우
+                if (isAccessibilityServiceEnabled()) {
+                    // 접근성 서비스를 시작한다.
+                    Toast.makeText(ActMmbActivity.this,"무물보 접근성 서비스가 시작되었습니다.", Toast.LENGTH_SHORT).show();
+                    startCustomAccessibilityService();
+                } else {
+                    // 접근성 서비스를 활성화할 수 있는 화면으로 이동합니다. -> 사용자가 직접 활성화해야 합니다. (이거 그냥 강제로 활성화 시킬까;)
+                    requestAccessibilityService();
+                }
+
+            }
+        });
+
+
     }
 
+    private boolean isAccessibilityServiceEnabled() {
+        int accessibilityEnabled = Settings.Secure.getInt(
+                getContentResolver(),
+                Settings.Secure.ACCESSIBILITY_ENABLED,
+                0
+        );
+        return accessibilityEnabled == 1;
+    }
 
-    ////////////
+    private void requestAccessibilityService() {
+        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        startActivityForResult(intent, REQUEST_ACCESSIBILITY);
+    }
+
+    private void startCustomAccessibilityService() {
+        Intent intent = new Intent(this, CustomAccessibilityService.class);
+        startService(intent);
+        Toast.makeText(this, "Custom Accessibility Service started", Toast.LENGTH_SHORT).show();
+    }
+    private void openKakaoTalk() {
+        String kakaoPackageName = "com.kakao.talk";
+        String kakaoPlayStoreUrl = "market://details?id=" + kakaoPackageName;
+        String kakaoWebUrl = "https://play.google.com/store/apps/details?id=" + kakaoPackageName;
+
+        // 카카오톡 앱이 설치되어 있는지 확인
+        PackageManager packageManager = getPackageManager();
+        Intent kakaoIntent = new Intent(Intent.ACTION_SEND);
+        kakaoIntent.setPackage(kakaoPackageName);
+        kakaoIntent.setType("text/plain");
+
+        List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(kakaoIntent, 0);
+        if (resolveInfoList.size() > 0) {
+            // 카카오톡 앱이 설치되어 있다면 해당 앱을 실행
+            Intent intent = packageManager.getLaunchIntentForPackage(kakaoPackageName);
+            startActivity(intent);
+        } else {
+            // 카카오톡 앱이 설치되어 있지 않다면 Play 스토어 이동
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(kakaoPlayStoreUrl));
+                startActivity(intent);
+            } catch (android.content.ActivityNotFoundException anfe) {
+                // Play 스토어가 설치되어 있지 않을 경우 웹사이트로 이동
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(kakaoWebUrl));
+                startActivity(intent);
+            }
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ACCESSIBILITY) {
+            if (isAccessibilityServiceEnabled()) {
+                startCustomAccessibilityService();
+            } else {
+                Toast.makeText(this, "Accessibility service not enabled", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     private void printAllAppPackageNames() {
         PackageManager packageManager = getPackageManager();

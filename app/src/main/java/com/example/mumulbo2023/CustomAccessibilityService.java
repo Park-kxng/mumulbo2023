@@ -9,6 +9,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
 public class CustomAccessibilityService extends AccessibilityService {
+    int Step = 0;
 
     @Override
     protected void onServiceConnected() {
@@ -26,32 +27,71 @@ public class CustomAccessibilityService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        // 접근성 이벤트가 발생했을 때 호출됩니다.
-        Log.d("log2","접근성 이벤트 발생");
+        // 접근성 이벤트가 발생했을 때
+        Log.d("log2","접근성 이벤트 발생"); // 발생했다고 알려줌
 
-        String packageName = String.valueOf(event.getPackageName()); // 지금 들어와있는 패키지 이름 저장
-        Log.d("log3-1",packageName);
+        //1. 초기화
+        String packageName = ""; // 패키지 이름 담는 변수 초기화
 
-        // 내가 지금 실행하고 있는 패키지가 카카오톡인 경우
+        //2. 패키지 이름 제대로 받아오기
+        AccessibilityNodeInfo sourceNode = event.getSource();
+        if(sourceNode != null){
+            packageName = String.valueOf(sourceNode.getPackageName());
+            //String packageName = String.valueOf(event.getPackageName()); // 지금 들어와있는 패키지 이름 저장
+            Log.d("log3-1",packageName); // 현재 어떤 앱에 위치해 있는지 출력
+
+        }
+
+        //3.내가 지금 실행하고 있는 패키지가 카카오톡인 경우
         if("com.kakao.talk".equals(packageName)){
             // 예시. 친구 추가하기 버튼을 찾는 로직을 구현할 예정
             Log.d("log3","룰루랄라");
 
-            AccessibilityNodeInfo sourceNode = event.getSource();
+            sourceNode = event.getSource();
             if (sourceNode != null) {
                 Log.d("log3-2","친구추가 버튼 누르기");
 
                 // 카카오톡이 클릭되었을 때의 동작을 여기에 구현
                 performFriendAddAction(sourceNode);
             }
-            // 클릭하면 클릭한 내용의 contentDescription을 읽는다.
+
+            // 클릭하면 실행되는 함수
             if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
+                // 클릭한 내용의 contentDescription을 읽는다.
                 CharSequence text = event.getContentDescription();
                 if (text == null) {
                     Log.d("log2-1", "내용이 없습니다.");
-                } else {
-                    Log.d("log2-1", text.toString());
                 }
+                else {
+                    String textToString = text.toString();
+                    Log.d("log2-1", text.toString());
+
+                    // 친구한테 카톡 보내기 1단계
+                    if(Step==0){
+                        if(textToString.contains("친구 탭")){
+                            // 친구한테 카톡보내기 로직 실행
+                            Log.d("log2-2", "친구한테 카톡 보내기 : 1단계");
+                            Step = 1;
+                        }
+                        else{
+                            Log.d("log2-2", "친구 목록을 확인하기 위해 가장 아래에 있는 사람 모양의 아이콘을 눌러주세요.");
+                        }
+                    }
+                    // 친구한테 카톡 보내기 2단계
+                    else if(Step == 1){
+                        if(textToString.contains("검색")){
+                            // 친구한테 카톡보내기 로직 실행
+                            Log.d("log2-2", "친구한테 카톡 보내기 : 2단계");
+                            Step = 2;
+                        }
+                        else{
+                            Log.d("log2-2", "보낼 친구를 검색하기 위해 검색하기 위해 가장 윗부분에 돋보기 버튼을 눌려주세요");
+                        }
+                    }
+                }
+
+
+
 
 
             }
