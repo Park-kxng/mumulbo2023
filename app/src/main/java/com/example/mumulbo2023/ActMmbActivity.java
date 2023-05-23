@@ -138,7 +138,10 @@ public class ActMmbActivity extends Activity {
                                                         userSTT = "";
                                                         gptTTS = "";
 
-                                                    } else {  //이미 녹음 중이면 녹음 중지
+                                                    }
+
+                                                    /*
+                                                    else {  //이미 녹음 중이면 녹음 중지
                                                         recording = false;
                                                         stopRecord();
                                                         recordingText.setText("녹음중? NO");
@@ -148,52 +151,10 @@ public class ActMmbActivity extends Activity {
                                                         //recordButton.setImageResource(R.drawable.icon_speak_mmb);
                                                         answer = true;
                                                         // ★★★★★★★★★★★★★★★★★★★★★★
-                                                        if (userSTT.contains("카카오톡") || userSTT.contains("카톡")) {
-                                                            // 카카오톡 앱을 열기 위한 인텐트 생성
-                                                            Intent intent = getPackageManager().getLaunchIntentForPackage("com.kakao.talk");
-                                                            if (intent != null) {
-                                                                // 카카오톡 앱이 설치되어 있는 경우 앱을 엽니다.
-                                                                startActivity(intent);
-                                                                sendMessage();
-                                                            } else {
-                                                                // 카카오톡 앱이 설치되어 있지 않은 경우 마켓으로 이동합니다.
-                                                                Log.d("카카오톡 설치x", "카카오톡 설치되어 있지 않음 마켓으로 이동");
-                                                                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.kakao.talk"));
-                                                                startActivity(intent);
-                                                            }
-                                                        } else if (userSTT.contains("쿠팡") || userSTT.contains("쇼핑")) {
-                                                            // 쿠팡 앱을 열기 위한 인텐트 생성
-                                                            Intent intent = getPackageManager().getLaunchIntentForPackage("com.coupang.mobile");
-                                                            if (intent != null) {
-                                                                // 쿠팡 앱이 설치되어 있는 경우 앱을 엽니다.
-                                                                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                                startActivity(intent);
-                                                            } else {
-                                                                // 쿠팡 앱이 설치되어 있지 않은 경우 마켓으로 이동합니다.
-                                                                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.coupang.mobile"));
-                                                                startActivity(intent);
-                                                            }
-                                                        } else if (userSTT.contains("알람") || userSTT.contains("시계")) {
-                                                            Intent intent = new Intent(Intent.ACTION_MAIN);
-                                                            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-                                                            intent.setComponent(new ComponentName("com.sec.android.app.clockpackage", "com.sec.android.app.clockpackage.ClockPackage"));
-                                                            startActivity(intent);
-                                                        }else{
-                                                            String pakageName =  findAppPackageNames(userSTT.split(" "));
-                                                            Intent intent = getPackageManager().getLaunchIntentForPackage( pakageName);
-                                                            if (intent != null) {
-                                                                // 쿠팡 앱이 설치되어 있는 경우 앱을 엽니다.
-                                                                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                                startActivity(intent);
-                                                            } else {
-                                                                // 쿠팡 앱이 설치되어 있지 않은 경우 마켓으로 이동합니다.
-                                                                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" +  pakageName));
-                                                                startActivity(intent);
-                                                            }
-                                                        }
-
-
+                                                        // 버튼 눌렀을 때 녹음 종료하고 앱 이동할거면 여기에 삽입
                                                     }
+
+                                                     */
                                                 }
 
 
@@ -382,8 +343,7 @@ public class ActMmbActivity extends Activity {
 
         @Override
         public void onEndOfSpeech() {
-            //사용자가 말을 멈추면 호출
-            //인식 결과에 따라 onError나 onResults가 호출됨
+
         }
 
         @Override
@@ -432,20 +392,76 @@ public class ActMmbActivity extends Activity {
         //인식 결과가 준비되면 호출
         @Override
         public void onResults(Bundle bundle) {
+            Log.d("녹음 상태 onResults", "onResults 호출됨 userSTT저장");
             ArrayList<String> matches = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);    //인식 결과를 담은 ArrayList
 
 
             for (int i = 0; i < matches.size(); i++) {
                 userSTT += matches.get(i);
             }
-
+            userSTT += " "; // 연속해서 말할 경우 띄어쓰기 포함
             editText.setText(userSTT);    //기존의 text에 인식 결과 보여
-            speechRecognizer.startListening(recordIntent);    //녹음버튼을 누를 때까지 계속 녹음해야 하므로 녹음 재개
+            // ★★★★★★★★★★★★★★★★★★★★★★
+            if (userSTT.contains("카카오톡") || userSTT.contains("카톡")) {
+                // 카카오톡 앱을 열기 위한 인텐트 생성
+                Intent intent = getPackageManager().getLaunchIntentForPackage("com.kakao.talk");
+                if (intent != null) {
+                    // 카카오톡 앱이 설치되어 있는 경우 앱을 엽니다.
+                    startActivity(intent);
+                    sendMessage();
+                } else {
+                    // 카카오톡 앱이 설치되어 있지 않은 경우 마켓으로 이동합니다.
+                    Log.d("카카오톡 설치x", "카카오톡 설치되어 있지 않음 마켓으로 이동");
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.kakao.talk"));
+                    startActivity(intent);
+                }
+            } else if (userSTT.contains("쿠팡") || userSTT.contains("쇼핑")) {
+                // 쿠팡 앱을 열기 위한 인텐트 생성
+                Intent intent = getPackageManager().getLaunchIntentForPackage("com.coupang.mobile");
+                if (intent != null) {
+                    // 쿠팡 앱이 설치되어 있는 경우 앱을 엽니다.
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
+                    // 쿠팡 앱이 설치되어 있지 않은 경우 마켓으로 이동합니다.
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.coupang.mobile"));
+                    startActivity(intent);
+                }
+            } else if (userSTT.contains("알람") || userSTT.contains("시계")) {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                intent.setComponent(new ComponentName("com.sec.android.app.clockpackage", "com.sec.android.app.clockpackage.ClockPackage"));
+                startActivity(intent);
+            }else{
+                String pakageName =  findAppPackageNames(userSTT.split(" "));
+                Intent intent = getPackageManager().getLaunchIntentForPackage( pakageName);
+                if (intent != null) {
+                    // 쿠팡 앱이 설치되어 있는 경우 앱을 엽니다.
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
+                    // 쿠팡 앱이 설치되어 있지 않은 경우 마켓으로 이동합니다.
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" +  pakageName));
+                    startActivity(intent);
+                }
+            }
+
+            recording = false;
+
+            recordingText.setText("녹음중? NO");
+            // TTS 테스트용으로 녹음 종료시 녹음된걸 말해주는거 넣어둠
+            question = editText.getText().toString();  // 물어본 답변은 저장합니다.
+            // 아이콘을 스피커 모양으로 변경합니다.
+            //recordButton.setImageResource(R.drawable.icon_speak_mmb);
+            //answer = true;
+            stopRecord();
+
+            //speechRecognizer.startListening(recordIntent);    //녹음버튼을 누를 때까지 계속 녹음해야 하므로 녹음 재개
         }
 
         @Override
         public void onPartialResults(Bundle bundle) {
-
+            Log.d("사용자 말 상태 : ", "onPartialResults : 중간중간");
         }
 
         @Override

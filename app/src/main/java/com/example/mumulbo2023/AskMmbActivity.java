@@ -267,7 +267,7 @@ public class AskMmbActivity extends Activity {
            for (int i = 0; i < matches.size() ; i++) {
                 userSTT += matches.get(i);
             }
-
+            userSTT += " "; // 연속해서 말할 경우 띄어쓰기 포함
             editText.setText(userSTT);	//기존의 text에 인식 결과 보여
             speechRecognizer.startListening(recordIntent);    //녹음버튼을 누를 때까지 계속 녹음해야 하므로 녹음 재개
         }
