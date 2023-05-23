@@ -11,6 +11,13 @@
         android:layout_weight="1"
         android:text="무물보에게 부탁하기" />
 
+    <TextView
+        android:id="@+id/recordingNowTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="녹음중? NO" />
+
     <EditText
         android:id="@+id/sttEditText"
         android:layout_width="match_parent"
