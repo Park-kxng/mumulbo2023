@@ -10,6 +10,23 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="무물보에게 부탁하기" />
+
+    <EditText
+        android:id="@+id/sttEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="STT 인식 부분" />
+
+    <Button
+        android:id="@+id/sttButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="STT Button(눌러서 물어보기)" />
+
     <TextView
         android:id="@+id/infoTextView"
         android:layout_width="wrap_content"
