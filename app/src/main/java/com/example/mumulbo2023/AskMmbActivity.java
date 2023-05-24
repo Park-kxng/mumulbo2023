@@ -1,6 +1,7 @@
 package com.example.mumulbo2023;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -37,6 +40,13 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.*;
 
 public class AskMmbActivity extends Activity {
+    // ChatGPT 처리 위한 THREAD Loading 관련 ▼
+    // 위의 데이터를 가져오는 시간이 길어 progressDialog로 로딩중 보여줌
+    ProgressDialog progressDialog;
+    private Handler handlerProgressDialog = new Handler();
+    final private int PROGRESS_DIALOG = 0;
+    Thread thread;
+
     ImageButton recordButton; // STT 시작 및 종료하는 버튼
     ImageView faceImage,imageRec; // TTS 시작할 때 웃는 얼굴로 바뀜
     TextView answerText,explain; // TTS로 음성으로 나오기도 하지만 텍스트로도 표시하기 위함
@@ -139,6 +149,7 @@ public class AskMmbActivity extends Activity {
                         editText.setText("");
                         userSTT ="";
                         gptTTS = "";
+                        recordButton.setImageResource(R.drawable.icon_speak_mmb);
 
                     }
                     else {  //이미 녹음 중이면 녹음 중지
@@ -149,7 +160,8 @@ public class AskMmbActivity extends Activity {
                         // TTS 테스트용으로 녹음 종료시 녹음된걸 말해주는거 넣어둠
                         question = editText.getText().toString();  // 물어본 답변은 저장합니다.
                         // 아이콘을 스피커 모양으로 변경합니다.
-                        recordButton.setImageResource(R.drawable.icon_speak_mmb);
+
+                        recordButton.setImageResource(R.drawable.icon_gpt_speak);
                         explain.setText("버튼을 눌러 무물보의 답변을 들어보세요!");
                         answer = true;
 
@@ -157,7 +169,12 @@ public class AskMmbActivity extends Activity {
                         question = editText.getText().toString();  // 물어본 답변은 저장합니다.
                         //챗 지피티에게 물어보고 답변을 gptTTS에 저장합니다.
                         System.out.println(question);
-                        callAPI(question,AskMmbActivity.this);
+
+                        //callAPI(question,AskMmbActivity.this);
+                        thread = new Thread(null, getChatGPTResults); //스레드 생성후 스레드에서 작업할 함수 지정해줌
+                        thread.start(); // 스레드 시작시키고
+                        showDialog(PROGRESS_DIALOG); //다이얼로그 팝업을 띄워 로딩중인걸 알림
+
                         System.out.println("gptTTS : "+gptTTS);
 
 
@@ -183,6 +200,40 @@ public class AskMmbActivity extends Activity {
 
 
 
+    }
+    // thread 처리 관련
+    // 자료 처리 : chatGPT로 가져온 것 처리해주는 부분
+    private Runnable getChatGPTResults= new Runnable() {
+        public void run() {
+            try {
+                callAPI(question,AskMmbActivity.this);
+                // 처리 완료후 handlerProgressDialog의 Post를 사용해서 이벤트 던짐
+                //handlerProgressDialog.post(updateResults);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("getDATA", e.toString());
+            }
+        }
+    };
+
+    private Runnable updateResults = new Runnable() {
+        public void run () {
+            // 만약에 다 끝났으면 로딩중 다이얼로그를 지워줌
+            progressDialog.dismiss();
+            removeDialog(PROGRESS_DIALOG);
+        }
+    };
+
+    @Override
+    protected Dialog onCreateDialog (int id) {
+        switch (id) {
+            case (PROGRESS_DIALOG):
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setMessage("(로딩중)chatGPT 답변을 가져오는 중입니다. 잠시만 기다려주세요!");
+                return progressDialog;
+        }
+        return null;
     }
 
     // 녹음 관련
@@ -316,10 +367,10 @@ public class AskMmbActivity extends Activity {
 
         // 로딩 시도 흔적 ▼
         // ProgressDialog 생성 및 설정
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("로딩 중...");
-        progressDialog.setCancelable(false); // 취소 불가능 설정
-        progressDialog.show();
+        //ProgressDialog progressDialog = new ProgressDialog(context);
+        //progressDialog.setMessage("로딩 중...");
+        //progressDialog.setCancelable(false); // 취소 불가능 설정
+        //progressDialog.show();
         // 로딩 시도 흔적 ▲
 
 
@@ -366,7 +417,7 @@ public class AskMmbActivity extends Activity {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Toast.makeText(getApplicationContext(), "에러가 발생하였습니다. : " , Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss(); // API 호출 실패 시 ProgressDialog 닫기
+                ///progressDialog.dismiss(); // API 호출 실패 시 ProgressDialog 닫기
 
             }
 
@@ -381,9 +432,11 @@ public class AskMmbActivity extends Activity {
                         JSONObject value = jsonArray.getJSONObject(0).getJSONObject("message");
                         result_copy = value.getString("content");
                         gptTTS = result_copy.toString();
-                        Toast.makeText(getApplicationContext(), gptTTS, Toast.LENGTH_SHORT).show();
+                        Log.d("gptTTS 받음", gptTTS);
+                        handlerProgressDialog.post(updateResults);
+                        //Toast.makeText(getApplicationContext(), gptTTS, Toast.LENGTH_SHORT).show();
                         // 로딩 시도 흔적 ▼
-                        progressDialog.dismiss(); // API 호출 실패 시 ProgressDialog 닫기
+                        //progressDialog.dismiss(); // API 호출 실패 시 ProgressDialog 닫기
                     }catch (JSONException e){
                         e.printStackTrace();
                     }

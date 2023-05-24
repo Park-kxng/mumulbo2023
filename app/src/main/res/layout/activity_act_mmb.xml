@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@color/grey"
         android:fontFamily="@font/bold"
-        android:text="무물보에게 부탁하기"
+        android:text="무물보에게 안내받기"
         android:textAlignment="center"
         android:textColor="@color/background"
         android:textSize="28sp" />

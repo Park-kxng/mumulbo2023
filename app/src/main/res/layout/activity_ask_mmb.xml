@@ -7,15 +7,17 @@
     android:gravity="center"
     android:orientation="vertical">
 
+
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/grey"
         android:fontFamily="@font/bold"
         android:text="무물보에게 물어보기"
         android:textAlignment="center"
-        android:textColor="@color/grey"
-        android:textSize="20sp" />
+        android:textColor="@color/background"
+        android:textSize="28sp" />
 
     <ImageView
         android:id="@+id/charc_mmb"
@@ -33,7 +35,7 @@
         android:layout_weight="1"
         android:ems="10"
         android:fontFamily="@font/medium"
-        android:inputType="text"
+        android:inputType="textMultiLine"
         android:text="질문이 표시되는 부분"
         android:textColor="@color/black" />
 
@@ -52,6 +54,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="210dp"
+        android:background="#C6C6C6"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -59,6 +62,7 @@
             android:id="@+id/imageButton"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/icon_speak"
             android:scaleType="centerCrop" />
