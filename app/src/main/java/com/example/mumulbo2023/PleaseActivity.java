@@ -97,7 +97,7 @@ public class PleaseActivity extends Activity {
 
         @Override
         public void onEndOfSpeech() {
-            stopRecord();
+           // stopRecord();
         }
 
         @Override
@@ -170,7 +170,7 @@ public class PleaseActivity extends Activity {
             Log.d("녹음 상태 onResults",  userSTT);
             //stopRecord();
 
-            speechRecognizer.startListening(recordIntent);    //녹음버튼을 누를 때까지 계속 녹음해야 하므로 녹음 재개
+            //speechRecognizer.startListening(recordIntent);    //녹음버튼을 누를 때까지 계속 녹음해야 하므로 녹음 재개
         }
 
         @Override
