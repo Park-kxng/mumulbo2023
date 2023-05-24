@@ -7,14 +7,22 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.graphics.Path;
+import android.os.Environment;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -26,7 +34,7 @@ public class CustomAccessibilityService extends AccessibilityService {
     Map<Integer, String> ActionsOfKakao= new HashMap<>(); // 단계 저장
     Map<Integer, String> CommentsOfKakao= new HashMap<>(); // 단계별 코멘트 저장 - 사용자가 잘못 누른 경우 제대로 누르도록 설명해주는 코드
 
-
+    String folder = "Test_Directory"; // 캡쳐화면 저장 폴더 이름
 
     // TTS 텍스트를 음성으로 관련
     TextToSpeech textToSpeech;
@@ -155,6 +163,16 @@ public class CustomAccessibilityService extends AccessibilityService {
 
         // ▼ 객체를 통해 현재 화면의 모든 UI에 대한 정보를 얻으려면 AccessibilityEvent.TYPE_WINDOWS_CHANGED 이벤트 수신
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOWS_CHANGED) {
+
+            // 현재 화면 캡쳐 후 갤러리에 저장
+            //전체화면
+            //View rootView = getWindow().getDecorView();
+
+            //File screenShot = ScreenShot(rootView);
+            //if(screenShot!=null){
+                //갤러리에 추가
+            //    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(screenShot)));
+            //}
 
             AccessibilityNodeInfo rootNode = getRootInActiveWindow();
             if (rootNode != null) {
@@ -298,5 +316,28 @@ public class CustomAccessibilityService extends AccessibilityService {
             // 클릭 동작이 실패한 경우의 처리
         }
     }
+
+    //화면 캡쳐하기
+    public File ScreenShot(View view){
+        view.setDrawingCacheEnabled(true);  //화면에 뿌릴때 캐시를 사용하게 한다
+
+        Bitmap screenBitmap = view.getDrawingCache();   //캐시를 비트맵으로 변환
+
+        String filename = "screenshot.png";
+        File file = new File(Environment.getExternalStorageDirectory()+"/Pictures", filename);  //Pictures폴더 screenshot.png 파일
+        FileOutputStream os = null;
+        try{
+            os = new FileOutputStream(file);
+            screenBitmap.compress(Bitmap.CompressFormat.PNG, 90, os);   //비트맵을 PNG파일로 변환
+            os.close();
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }
+
+        view.setDrawingCacheEnabled(false);
+        return file;
+    }
+
 
 }

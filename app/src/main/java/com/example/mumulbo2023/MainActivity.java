@@ -42,13 +42,13 @@ public class MainActivity extends AppCompatActivity {
         // Manifest에 퍼미션 추가하고 여기에다가 권한 필요한거 싹다 집어넣으면 된다
         String[] permissions = {
                 //android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                //android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 //android.Manifest.permission.INTERNET,
                 android.Manifest.permission.RECORD_AUDIO,
                 android.Manifest.permission.SEND_SMS,
                 android.Manifest.permission.SET_ALARM,
                 android.Manifest.permission.SYSTEM_ALERT_WINDOW,
-                android.Manifest.permission.FOREGROUND_SERVICE
+                android.Manifest.permission.FOREGROUND_SERVICE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 
         };
         checkPermissions(permissions); // 권한 허용할 것인지 물어보는 것 부분 함수
@@ -82,23 +82,25 @@ public class MainActivity extends AppCompatActivity {
         button_please.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                Intent intent = new Intent(getApplicationContext(), PleaseActivity.class);
+                startActivity(intent);
                 // 실제로는 내장 DB에서 전송 메시지 내용 가져오기
                 // 전송 메시지: [ + <사용자 이름> + 님의 원격접속 해결 요청] + 요구사항 + 팀뷰어 다운로드 링크 + 사용자 퀵서포트 ID
 
                 // 우선 테스트하려고 하드코딩 해놓음
-                phoneNo = "01095033866"; // 소현이 번호, 이 형태로 해야 오는지 010-9503-3866 (아래 70번째 줄에 +82 삭제)로 해야 오는지 테스트 필요
+                //phoneNo = "01095033866"; // 소현이 번호, 이 형태로 해야 오는지 010-9503-3866 (아래 70번째 줄에 +82 삭제)로 해야 오는지 테스트 필요
 
-                sms = "[박소현님의 원격접속 해결 요청]\n 건강보험자격득실 확인서 발급 어떻게 받니 \n 파트너 ID: 1 794 040 464";
+                //sms = "[박소현님의 원격접속 해결 요청]\n 건강보험자격득실 확인서 발급 어떻게 받니 \n 파트너 ID: 1 794 040 464";
                 //sms = "https://www.teamviewer.com/ko/download/";
-                try {
+                //try {
                     //전송
-                    SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(phoneNo, null, sms, null, null);
-                    Toast.makeText(getApplicationContext(), "전송을 완료하였습니다.", Toast.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "전송 과정에 오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
+                //    SmsManager smsManager = SmsManager.getDefault();
+               //     smsManager.sendTextMessage(phoneNo, null, sms, null, null);
+                //    Toast.makeText(getApplicationContext(), "전송을 완료하였습니다.", Toast.LENGTH_LONG).show();
+                //} catch (Exception e) {
+               //     Toast.makeText(getApplicationContext(), "전송 과정에 오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show();
+               //     e.printStackTrace();
+               // }
             }
         });
         testPky.setOnClickListener(new View.OnClickListener(){
