@@ -35,6 +35,9 @@ public class CustomAccessibilityService extends AccessibilityService {
     Map<Integer, String> ActionsOfKakao= new HashMap<>(); // 단계 저장
     Map<Integer, String> CommentsOfKakao= new HashMap<>(); // 단계별 코멘트 저장 - 사용자가 잘못 누른 경우 제대로 누르도록 설명해주는 코드
 
+    Map<Integer, String> ActionsOfCoupang= new HashMap<>(); // 단계 저장
+    Map<Integer, String> CommentsOfCoupang= new HashMap<>(); // 단계별 코멘트 저장 - 사용자가 잘못 누른 경우 제대로 누르도록 설명해주는 코드
+
     String folder = "Test_Directory"; // 캡쳐화면 저장 폴더 이름
 
     // TTS 텍스트를 음성으로 관련
@@ -184,8 +187,68 @@ public class CustomAccessibilityService extends AccessibilityService {
 
             }
             // ▲ 위는 클릭했을 때 어떤 것인지 log 찍는 것
+        }
 
+        // 4.내가 지금 실행하고 있는 패키지가 쿠팡인 경우
+        if("com.coupang.mobile".equals(packageName)){
+            Log.d("log4","쿠팡에서 실행 중!");
+            AddDataToCoupang(); // 쿠팡 관련 데이터를 추가합니다ㅏ.
+            if(Step == 0){
+                // 처음 시작하는 경우
+                Step  = 1;
+            }
 
+            // 클릭하면 실행되는 함수
+            if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
+                // 클릭한 내용의 contentDescription을 읽는다.
+                CharSequence text = event.getContentDescription();
+                if(text == null){ textToString = "내용이 없습니다.";} // 내용이 없는 경우 -> 내용이 없습니다.
+                else {textToString = text.toString();} // 내용이 있는 경우 -> 저장
+                Log.d("log2-1(클릭-컨텐츠 출력) : ", textToString);
+
+                // 단계에 따라 동작을 안내하는 알고리즘
+                switch (Step) {
+                    case 1:
+                        if(textToString.contains(ActionsOfCoupang.get(Step))){
+                            PrintLog(packageName,Step,1);
+                            Step = 2;
+                        }
+                        else{PrintLog(packageName,Step,0);}
+                        break;
+                    case 2:
+                        if(textToString.contains(ActionsOfCoupang.get(Step))){
+                            PrintLog(packageName,Step,1);
+                            Step = 3;
+                        }
+                        else{PrintLog(packageName,Step,0);}
+                        break;
+                    case 3:
+                        if(textToString.contains(ActionsOfCoupang.get(Step))){
+                            PrintLog(packageName,Step,1);
+                            Step = 4;
+                        }
+                        else{PrintLog(packageName,Step,0);}
+                        break;
+                    case 4:
+                        if(textToString.contains(ActionsOfCoupang.get(Step))){
+                            PrintLog(packageName,Step,1);
+                            Step = 5;
+                        }
+                        else{PrintLog(packageName,Step,0);}
+                        break;
+                    case 5:
+                        if(textToString.contains(ActionsOfCoupang.get(Step))){
+                            PrintLog(packageName,Step,1);
+                            Step = 0;
+                        }
+                        else{PrintLog(packageName,Step,0);}
+                        break;
+                    default:
+                        // 모든 case에 해당하지 않을 때 실행되는 코드 블록
+                }
+
+            }
+            // ▲ 위는 클릭했을 때 어떤 것인지 log 찍는 것
         }
 
         // ▼ 유진언니 코드
@@ -304,6 +367,28 @@ public class CustomAccessibilityService extends AccessibilityService {
             }
         return null;
     }
+
+    private void AddDataToCoupang(){
+        // 쿠팡 관련 데이터를 추가하는 함수
+        ActionsOfCoupang.put(1, "쿠팡에서 검색하세요 수정창");
+        CommentsOfCoupang.put(1, "검색창을 클릭하세요");
+
+        ActionsOfCoupang.put(2, "검색어 입력 수정창");
+        CommentsOfCoupang.put(2, "검색창에 사고자하는 물품을 검색하세요");
+
+        ActionsOfCoupang.put(3, "두유");
+        CommentsOfCoupang.put(3, "상품 목록 중에 원하는 것을 선택하세요");
+
+        ActionsOfCoupang.put(4, "구매하기");
+        CommentsOfCoupang.put(4, "구매하시려면 구매하기 버튼을 눌러주세요");
+
+        ActionsOfCoupang.put(5, "바로구매");
+        CommentsOfCoupang.put(5, "바로 구매 버튼을 눌러주세요");
+
+        ActionsOfCoupang.put(5, "결제하기");
+        CommentsOfCoupang.put(5, "결제하기 버튼을 눌러주세요");
+    }
+
     @Override
     public void onInterrupt() {
         Log.e("log3","접근성 이벤트 중단");
