@@ -23,6 +23,7 @@
         <package android:name="com.nhn.android.nmap"/>
         <package android:name="com.nhn.android.search"/>
         <package android:name="com.sec.android.app.popupcalculator"/>
+        <package android:name="com.teamviewer.teamviewer.market.mobile"/>
 
     </queries>
     <!-- 3. 원격 관련 퍼미션 : -->
