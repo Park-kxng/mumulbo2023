@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ public class PleaseActivity extends Activity {
     boolean recording = false;  //현재 녹음중인지 여부
     String userSTT = ""; // 음성 인식 결과
     EditText please_request;
+    String request;
 
 
     @Override
@@ -151,13 +153,24 @@ public class PleaseActivity extends Activity {
             Log.d("녹음 상태 onResults", "onResults 호출됨 userSTT저장");
             ArrayList<String> matches = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);    //인식 결과를 담은 ArrayList
 
-
             for (int i = 0; i < matches.size(); i++) {
                 userSTT += matches.get(i);
             }
             userSTT += " "; // 연속해서 말할 경우 띄어쓰기 포함
             please_request.setText(userSTT);    //기존의 text에 인식 결과 보여
 
+            request = userSTT;
+            // 실제로는 내장 DB에서 전송 메시지 내용 가져오기
+            // 전송 메시지: [ + <사용자 이름> + 님의 원격접속 해결 요청] + 요구사항 + 팀뷰어 다운로드 링크 + 사용자 퀵서포트 ID
+
+            // 우선 테스트하려고 하드코딩 해놓음
+            String phoneNo = "01095033866"; // 소현이 번호
+
+            String sms1 = "[정유진님의 원격접속 해결 요청]\n" + request +  "\n 파트너 ID: 1 794 040 464";
+            String sms2 = "https://www.teamviewer.com/ko/download/";
+
+            sendMsg(phoneNo, sms1);
+            sendMsg(phoneNo, sms2);
 
             recording = false;
 
@@ -183,5 +196,16 @@ public class PleaseActivity extends Activity {
 
         }
     };
+    void sendMsg(String phoneNo, String sms){
+        try {
+            //전송
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNo, null, sms, null, null);
+            Toast.makeText(getApplicationContext(), "전송을 완료하였습니다.", Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "전송 과정에 오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
 
 }

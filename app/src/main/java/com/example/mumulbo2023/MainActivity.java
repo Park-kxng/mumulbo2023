@@ -17,9 +17,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    String phoneNo;
-    String sms;
-
     // 연락처는 여기에서 관리됨. static으로 여러곳에서 접근.
     public static ArrayList<OnePerson> personArrayList;
     public static int Step;
@@ -86,23 +83,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view){
                 Intent intent = new Intent(getApplicationContext(), PleaseActivity.class);
                 startActivity(intent);
-                // 실제로는 내장 DB에서 전송 메시지 내용 가져오기
-                // 전송 메시지: [ + <사용자 이름> + 님의 원격접속 해결 요청] + 요구사항 + 팀뷰어 다운로드 링크 + 사용자 퀵서포트 ID
-
-                // 우선 테스트하려고 하드코딩 해놓음
-                //phoneNo = "01095033866"; // 소현이 번호, 이 형태로 해야 오는지 010-9503-3866 (아래 70번째 줄에 +82 삭제)로 해야 오는지 테스트 필요
-
-                //sms = "[박소현님의 원격접속 해결 요청]\n 건강보험자격득실 확인서 발급 어떻게 받니 \n 파트너 ID: 1 794 040 464";
-                //sms = "https://www.teamviewer.com/ko/download/";
-                //try {
-                    //전송
-                //    SmsManager smsManager = SmsManager.getDefault();
-               //     smsManager.sendTextMessage(phoneNo, null, sms, null, null);
-                //    Toast.makeText(getApplicationContext(), "전송을 완료하였습니다.", Toast.LENGTH_LONG).show();
-                //} catch (Exception e) {
-               //     Toast.makeText(getApplicationContext(), "전송 과정에 오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show();
-               //     e.printStackTrace();
-               // }
             }
         });
         testPky.setOnClickListener(new View.OnClickListener(){
