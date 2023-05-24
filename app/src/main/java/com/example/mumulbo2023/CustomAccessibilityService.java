@@ -385,8 +385,8 @@ public class CustomAccessibilityService extends AccessibilityService {
         ActionsOfCoupang.put(5, "바로구매");
         CommentsOfCoupang.put(5, "바로 구매 버튼을 눌러주세요");
 
-        ActionsOfCoupang.put(5, "결제하기");
-        CommentsOfCoupang.put(5, "결제하기 버튼을 눌러주세요");
+        ActionsOfCoupang.put(6, "결제하기");
+        CommentsOfCoupang.put(6, "결제하기 버튼을 눌러주세요");
     }
 
     @Override
