@@ -1,11 +1,14 @@
 package com.example.mumulbo2023;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -34,6 +37,7 @@ public class PleaseActivity extends Activity {
         recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");   //한국어
 
         recordButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 if (!recording) {   //녹음 시작
@@ -56,13 +60,16 @@ public class PleaseActivity extends Activity {
 
         //recordButton.setText("음성 녹음 변환 중지");
         Toast.makeText(getApplicationContext(), "음성인식 시작", Toast.LENGTH_SHORT).show();
-        speechRecognizer=SpeechRecognizer.createSpeechRecognizer(getApplicationContext());
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(getApplicationContext());
         speechRecognizer.setRecognitionListener(listener);
         speechRecognizer.startListening(recordIntent);
     }
 
     //녹음 중지
     void stopRecord() {
+        //recording = false;
+
+        //recordButton.setText("음성 녹음 변환 시작");
         speechRecognizer.stopListening();   //녹음 중지
         speechRecognizer.destroy(); // 걍 없애버림 자꾸 소리 들으면 인식하려고 하길래
         Toast.makeText(getApplicationContext(), "음성 기록을 중지합니다.", Toast.LENGTH_SHORT).show();
@@ -88,8 +95,7 @@ public class PleaseActivity extends Activity {
 
         @Override
         public void onEndOfSpeech() {
-            //사용자가 말을 멈추면 호출
-            //인식 결과에 따라 onError나 onResults가 호출됨
+            stopRecord();
         }
 
         @Override
@@ -113,7 +119,8 @@ public class PleaseActivity extends Activity {
                     message = "네트웍 타임아웃";
                     break;
                 case SpeechRecognizer.ERROR_NO_MATCH:
-                    //message = "찾을 수 없음";
+                    Log.d("녹음 상태 ERROR_NO_MATCH", "ERROR_NO_MATCH에러다--------------------");
+                    message = "찾을 수 없음";
                     //녹음을 오래하거나 speechRecognizer.stopListening()을 호출하면 발생하는 에러
                     //speechRecognizer를 다시 생성하여 녹음 재개
                     if (recording)
@@ -138,18 +145,33 @@ public class PleaseActivity extends Activity {
         //인식 결과가 준비되면 호출
         @Override
         public void onResults(Bundle bundle) {
-            ArrayList<String> matches = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);	//인식 결과를 담은 ArrayList
-            for (int i = 0; i < matches.size() ; i++) {
+            Log.d("녹음 상태 onResults", "onResults 호출됨 userSTT저장");
+            ArrayList<String> matches = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);    //인식 결과를 담은 ArrayList
+
+
+            for (int i = 0; i < matches.size(); i++) {
                 userSTT += matches.get(i);
             }
             userSTT += " "; // 연속해서 말할 경우 띄어쓰기 포함
-            please_request.setText(userSTT);	//기존의 text에 인식 결과 보여
-            speechRecognizer.startListening(recordIntent);    //녹음버튼을 누를 때까지 계속 녹음해야 하므로 녹음 재개
+            please_request.setText(userSTT);    //기존의 text에 인식 결과 보여
+
+
+            recording = false;
+
+            //recordingText.setText("녹음중? NO");
+            // TTS 테스트용으로 녹음 종료시 녹음된걸 말해주는거 넣어둠
+           // question = editText.getText().toString();  // 물어본 답변은 저장합니다.
+            // 아이콘을 스피커 모양으로 변경합니다.
+            //recordButton.setImageResource(R.drawable.icon_speak_mmb);
+            //answer = true;
+            stopRecord();
+
+            //speechRecognizer.startListening(recordIntent);    //녹음버튼을 누를 때까지 계속 녹음해야 하므로 녹음 재개
         }
 
         @Override
         public void onPartialResults(Bundle bundle) {
-
+            Log.d("사용자 말 상태 : ", "onPartialResults : 중간중간");
         }
 
         @Override
