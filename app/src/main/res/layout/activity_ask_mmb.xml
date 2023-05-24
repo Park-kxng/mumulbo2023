@@ -3,24 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
     android:background="@color/background"
     android:gravity="center"
     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bold"
+        android:text="무물보에게 물어보기"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/charc_mmb"
         android:layout_width="255dp"
         android:layout_height="134dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="30dp"
         android:layout_weight="1"
         android:src="@drawable/character_mmb" />
 
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
-        android:layout_height="23dp"
+        android:layout_height="57dp"
         android:layout_marginTop="15dp"
         android:layout_weight="1"
         android:ems="10"
@@ -34,26 +42,46 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="10dp"
         android:layout_weight="1"
         android:fontFamily="@font/medium"
         android:text="답변이 보이는 부분"
         android:textColor="@color/black"
         android:textSize="14sp" />
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="80dp"
-        android:background="@drawable/icon_speak"
-        android:scaleType="centerCrop" />
-
-    <TextView
-        android:id="@+id/textView6"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_weight="1"
-        android:text="녹음 중? NO"
-        android:textColor="@color/black" />
+        android:layout_height="210dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/icon_speak"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/explain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:text="버튼을 눌러 음성 녹음을 시작해주세요!"
+            android:textAlignment="center"
+            android:textColor="@color/grey"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/imageRec"
+            android:layout_width="180dp"
+            android:layout_height="3dp"
+            android:layout_marginBottom="30dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/rec" />
+    </LinearLayout>
+
+
 </LinearLayout>

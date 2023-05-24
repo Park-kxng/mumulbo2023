@@ -1,7 +1,10 @@
 package com.example.mumulbo2023;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -35,8 +38,8 @@ import okhttp3.*;
 
 public class AskMmbActivity extends Activity {
     ImageButton recordButton; // STT 시작 및 종료하는 버튼
-    ImageView faceImage; // TTS 시작할 때 웃는 얼굴로 바뀜
-    TextView answerText, recordingText; // TTS로 음성으로 나오기도 하지만 텍스트로도 표시하기 위함
+    ImageView faceImage,imageRec; // TTS 시작할 때 웃는 얼굴로 바뀜
+    TextView answerText,explain; // TTS로 음성으로 나오기도 하지만 텍스트로도 표시하기 위함
     // STT 녹음 관련
     SpeechRecognizer speechRecognizer;
     Intent recordIntent;
@@ -65,6 +68,7 @@ public class AskMmbActivity extends Activity {
             .build();
 
     private static final String MY_SECRET_KEY = "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";
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -76,8 +80,9 @@ public class AskMmbActivity extends Activity {
         recordButton = findViewById(R.id.imageButton);
         faceImage = findViewById(R.id.charc_mmb);
         answerText = findViewById(R.id.speakText); // ▶ 챗 지피티 답변을 받는 변수
-        recordingText = findViewById(R.id.textView6); // ▶ 녹음 중인지 확인 용도 나중에 빼도 됨
         editText = findViewById(R.id.editText); // ▶ STT 잘 되고 있는지 확인 용도 최종 결과에선 삭제해도 됨
+        imageRec = findViewById(R.id.imageRec);
+        explain = findViewById(R.id.explain);
         // 챗 지피티 관련 객체 생성
 
 
@@ -93,24 +98,26 @@ public class AskMmbActivity extends Activity {
 
                 // answer == true -> 음성봇이 말해야 하는 경우
                 if (answer == true){ // 챗 지피티 답변 시작
+
+                    System.out.println("gptTTS : "+gptTTS);
+
                     // 캐릭터의 얼굴을 웃는 얼굴로 변경합니다.
                     faceImage.setImageResource(R.drawable.character_mmb_smile);
-                    question = editText.getText().toString();  // 물어본 답변은 저장합니다.
-                    //챗 지피티에게 물어보고 답변을 gptTTS에 저장합니다.
-                    System.out.println(question);
-                    gptTTS = callAPI(question);
-                    Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_SHORT).show();
-                    System.out.println("gptTTS : "+ gptTTS);
-                    System.out.println("temp : "+temp);
-                    System.out.println("answerText : "+answerText);
+
                     answerText.setText(gptTTS); // 답변 부분에 출력
                     textToSpeech.setPitch(1.0f); // 높낮이
                     textToSpeech.setSpeechRate(1.0f); // 바르기
                     textToSpeech.speak(gptTTS, TextToSpeech.QUEUE_FLUSH, null);
                     answer = false; // 챗 지피티가 답변을 완료하였습니다.
 
+                    Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_SHORT).show();
+                    System.out.println("gptTTS : "+ gptTTS);
+                    System.out.println("temp : "+temp);
+                    System.out.println("answerText : "+answerText);
+
                     // 아이콘을 녹음 모양으로 변경합니다.
                     recordButton.setImageResource(R.drawable.icon_speak);
+                    explain.setText("버튼을 눌러 음성 녹음을 시작해주세요!");
 
                 }
                 // answer == false --> 사람이 말해야 하는 경우
@@ -122,8 +129,8 @@ public class AskMmbActivity extends Activity {
                         recording = true;
                         startRecord();
                         Toast.makeText(getApplicationContext(), "지금부터 무엇이든 물어보세요!", Toast.LENGTH_SHORT).show();
-                        recordingText.setText("녹음 중입니다!");
-                        recordingText.setText("");
+                        imageRec.setImageResource(R.drawable.rec);
+                        explain.setText("버튼을 다시 누르면 음성 녹음을 종료할 수 있어요!");
                         // 캐릭터의 얼굴을 무표정 얼굴로 변경합니다.
                         faceImage.setImageResource(R.drawable.character_mmb);
 
@@ -137,13 +144,21 @@ public class AskMmbActivity extends Activity {
                     else {  //이미 녹음 중이면 녹음 중지
                         recording = false;
                         stopRecord();
-                        recordingText.setText("녹음중? NO");
+                        imageRec.setImageResource(R.drawable.notrec);
+
                         // TTS 테스트용으로 녹음 종료시 녹음된걸 말해주는거 넣어둠
                         question = editText.getText().toString();  // 물어본 답변은 저장합니다.
                         // 아이콘을 스피커 모양으로 변경합니다.
                         recordButton.setImageResource(R.drawable.icon_speak_mmb);
+                        explain.setText("버튼을 눌러 무물보의 답변을 들어보세요!");
                         answer = true;
 
+                        // 챗지피티에게 답변 요청
+                        question = editText.getText().toString();  // 물어본 답변은 저장합니다.
+                        //챗 지피티에게 물어보고 답변을 gptTTS에 저장합니다.
+                        System.out.println(question);
+                        callAPI(question,AskMmbActivity.this);
+                        System.out.println("gptTTS : "+gptTTS);
 
 
                     }
@@ -294,10 +309,19 @@ public class AskMmbActivity extends Activity {
         super.onDestroy();
     }
 
-    String callAPI(String question){
+    void callAPI(String question, Context context){
         //okhttp
         // 챗 지피티가 답변하기 전, 말할 부분을 표시하기 위해 원래 있던 부분을 초기화합니다.
-        editText.setText("");
+        //editText.setText("");
+
+        // 로딩 시도 흔적 ▼
+        // ProgressDialog 생성 및 설정
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("로딩 중...");
+        progressDialog.setCancelable(false); // 취소 불가능 설정
+        progressDialog.show();
+        // 로딩 시도 흔적 ▲
+
 
         //추가된 내용
         JSONArray arr = new JSONArray();
@@ -342,6 +366,8 @@ public class AskMmbActivity extends Activity {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Toast.makeText(getApplicationContext(), "에러가 발생하였습니다. : " , Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss(); // API 호출 실패 시 ProgressDialog 닫기
+
             }
 
             @Override
@@ -354,7 +380,10 @@ public class AskMmbActivity extends Activity {
                         JSONArray jsonArray = jsonObject.getJSONArray("choices");
                         JSONObject value = jsonArray.getJSONObject(0).getJSONObject("message");
                         result_copy = value.getString("content");
-                        //Toast.makeText(getApplicationContext(), result.trim(), Toast.LENGTH_SHORT).show();
+                        gptTTS = result_copy.toString();
+                        Toast.makeText(getApplicationContext(), gptTTS, Toast.LENGTH_SHORT).show();
+                        // 로딩 시도 흔적 ▼
+                        progressDialog.dismiss(); // API 호출 실패 시 ProgressDialog 닫기
                     }catch (JSONException e){
                         e.printStackTrace();
                     }
@@ -366,7 +395,7 @@ public class AskMmbActivity extends Activity {
                 }
             }
         });
-        return result_copy;
+
     }
     void addResponse(String response){
         temp = response;
