@@ -2,13 +2,36 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" >
 
+<<<<<<< HEAD
     <!-- 1. 물어보기 관련 퍼미션 : STT, TTS, ChatGPT -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 2. 관련 퍼미션 : -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SET_ALARM" /> <!-- 3. 원격 관련 퍼미션 : -->
+=======
+
+    <!-- 2. 관련 퍼미션 및 쿼리: -->
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <queries>
+        <package android:name="com.kakao.talk"/>
+        <package android:name="com.coupang.mobile"/>
+        <package android:name="com.google.android.youtube"/>
+        <package android:name="com.sec.android.gallery3d"/>
+        <package android:name="com.samsung.android.messaging"/>
+        <package android:name="com.skt.prod.dialer"/>
+        <package android:name="com.samsung.android.calendar"/>
+        <package android:name="com.nhn.android.nmap"/>
+        <package android:name="com.nhn.android.search"/>
+        <package android:name="com.sec.android.app.popupcalculator"/>
+
+    </queries>
+    <!-- 3. 원격 관련 퍼미션 : -->
+>>>>>>> 5ce40c07d8f5d975d6453d465958135175633b19
     <uses-permission android:name="android.permission.SEND_SMS" />
+
+
 
     <application
         android:allowBackup="true"
@@ -44,9 +67,14 @@
 
         <service
             android:name=".CustomAccessibilityService"
+<<<<<<< HEAD
             android:exported="true"
             android:label="Custom Accessibility Service"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
+=======
+            android:label="무엇이든 물어보세요"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+>>>>>>> 5ce40c07d8f5d975d6453d465958135175633b19
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
