@@ -60,6 +60,7 @@ public class PleaseActivity extends Activity {
 
         //recordButton.setText("음성 녹음 변환 중지");
         Toast.makeText(getApplicationContext(), "음성인식 시작", Toast.LENGTH_SHORT).show();
+        Log.d("녹음 상태 startRecord()", "startRecord()--------------------");
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(getApplicationContext());
         speechRecognizer.setRecognitionListener(listener);
         speechRecognizer.startListening(recordIntent);
@@ -72,6 +73,7 @@ public class PleaseActivity extends Activity {
         //recordButton.setText("음성 녹음 변환 시작");
         speechRecognizer.stopListening();   //녹음 중지
         speechRecognizer.destroy(); // 걍 없애버림 자꾸 소리 들으면 인식하려고 하길래
+        Log.d("녹음 상태 stopRecord()", "stopRecord()--------------------");
         Toast.makeText(getApplicationContext(), "음성 기록을 중지합니다.", Toast.LENGTH_SHORT).show();
     }
 
@@ -95,7 +97,7 @@ public class PleaseActivity extends Activity {
 
         @Override
         public void onEndOfSpeech() {
-            stopRecord();
+           // stopRecord();
         }
 
         @Override
@@ -139,6 +141,7 @@ public class PleaseActivity extends Activity {
                     message = "알 수 없는 오류임";
                     break;
             }
+            Log.d("에러가 발생하였습니다. : ", "에러다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ"+message);
             Toast.makeText(getApplicationContext(), "에러가 발생하였습니다. : " + message, Toast.LENGTH_SHORT).show();
         }
 
@@ -164,7 +167,8 @@ public class PleaseActivity extends Activity {
             // 아이콘을 스피커 모양으로 변경합니다.
             //recordButton.setImageResource(R.drawable.icon_speak_mmb);
             //answer = true;
-            stopRecord();
+            Log.d("녹음 상태 onResults",  userSTT);
+            //stopRecord();
 
             //speechRecognizer.startListening(recordIntent);    //녹음버튼을 누를 때까지 계속 녹음해야 하므로 녹음 재개
         }
