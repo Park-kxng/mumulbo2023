@@ -40,7 +40,7 @@ import java.util.Locale;
 
 public class ActMmbActivity extends Activity {
     public int Step = 0;
-    Button kakaoButton, alarmButton, coupangButton, recordButton, button_AccessConect, button_Complete;
+    Button recordButton, button_AccessConect, button_Complete;
     //////
     TextView recordingText; // TTS로 음성으로 나오기도 하지만 텍스트로도 표시하기 위함
     //TextView answerText;
@@ -80,9 +80,6 @@ public class ActMmbActivity extends Activity {
         // com.samsung.android.camerasdkservice
         // com.samsung.android.bixby.agent
 
-        kakaoButton = findViewById(R.id.kakaoButton);
-        alarmButton = findViewById(R.id.alarmButton);
-        coupangButton = findViewById(R.id.coupangButton);
 
         // STT 관련
         recordButton = findViewById(R.id.sttButton);
@@ -111,73 +108,73 @@ public class ActMmbActivity extends Activity {
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                                                System.out.println("버튼을 클릭하였습니다.");
-                                                System.out.println(answer);
+                System.out.println("버튼을 클릭하였습니다.");
+                System.out.println(answer);
 
-                                                // answer == true -> 음성봇이 말해야 하는 경우
-                                                if (answer == true) { // 챗 지피티 답변 시작
-                                                    /*
-                                                    // 캐릭터의 얼굴을 웃는 얼굴로 변경합니다.
-                                                    faceImage.setImageResource(R.drawable.character_mmb_smile);
-                                                    question = editText.getText().toString();  // 물어본 답변은 저장합니다.
-                                                    //챗 지피티에게 물어보고 답변을 gptTTS에 저장합니다.
-                                                    System.out.println(question);
-                                                    gptTTS = callAPI(question);
-                                                    Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_SHORT).show();
-                                                    System.out.println("gptTTS : "+ gptTTS);
-                                                    System.out.println("temp : "+temp);
-                                                    System.out.println("answerText : "+answerText);
-                                                    answerText.setText(gptTTS); // 답변 부분에 출력
-                                                    textToSpeech.setPitch(1.0f); // 높낮이
-                                                    textToSpeech.setSpeechRate(1.0f); // 바르기
-                                                    textToSpeech.speak(gptTTS, TextToSpeech.QUEUE_FLUSH, null);
-                                                    */
-                                                    answer = false; // 챗 지피티가 답변을 완료하였습니다.
+                // answer == true -> 음성봇이 말해야 하는 경우
+                if (answer == true) { // 챗 지피티 답변 시작
+                    /*
+                    // 캐릭터의 얼굴을 웃는 얼굴로 변경합니다.
+                    faceImage.setImageResource(R.drawable.character_mmb_smile);
+                    question = editText.getText().toString();  // 물어본 답변은 저장합니다.
+                    //챗 지피티에게 물어보고 답변을 gptTTS에 저장합니다.
+                    System.out.println(question);
+                    gptTTS = callAPI(question);
+                    Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_SHORT).show();
+                    System.out.println("gptTTS : "+ gptTTS);
+                    System.out.println("temp : "+temp);
+                    System.out.println("answerText : "+answerText);
+                    answerText.setText(gptTTS); // 답변 부분에 출력
+                    textToSpeech.setPitch(1.0f); // 높낮이
+                    textToSpeech.setSpeechRate(1.0f); // 바르기
+                    textToSpeech.speak(gptTTS, TextToSpeech.QUEUE_FLUSH, null);
+                    */
+                    answer = false; // 챗 지피티가 답변을 완료하였습니다.
 
-                                                    // 아이콘을 녹음 모양으로 변경합니다.
-                                                    //recordButton.setImageResource(R.drawable.icon_speak);
+                    // 아이콘을 녹음 모양으로 변경합니다.
+                    //recordButton.setImageResource(R.drawable.icon_speak);
 
-                                                }
-                                                // answer == false --> 사람이 말해야 하는 경우
-                                                else if (answer == false) {
-                                                    if (!recording) {   //녹음 시작
-                                                        //textToSpeech.stop();
-                                                        //textToSpeech.shutdown();
+                }
+                // answer == false --> 사람이 말해야 하는 경우
+                else if (answer == false) {
+                    if (!recording) {   //녹음 시작
+                        //textToSpeech.stop();
+                        //textToSpeech.shutdown();
 
-                                                        recording = true;
-                                                        startRecord();
-                                                        Toast.makeText(getApplicationContext(), "지금부터 무엇이든 물어보세요!", Toast.LENGTH_SHORT).show();
-                                                        recordingText.setText("녹음 중 입니다");
-                                                        // 캐릭터의 얼굴을 무표정 얼굴로 변경합니다.
-                                                        //faceImage.setImageResource(R.drawable.character_mmb);
+                        recording = true;
+                        startRecord();
+                        Toast.makeText(getApplicationContext(), "지금부터 무엇이든 물어보세요!", Toast.LENGTH_SHORT).show();
+                        recordingText.setText("녹음 중 입니다");
+                        // 캐릭터의 얼굴을 무표정 얼굴로 변경합니다.
+                        //faceImage.setImageResource(R.drawable.character_mmb);
 
-                                                        // 기존에 있던 애들 초기화
-                                                        //answerText.setText("");
-                                                        editText.setText("");
-                                                        userSTT = "";
-                                                        gptTTS = "";
+                        // 기존에 있던 애들 초기화
+                        //answerText.setText("");
+                        editText.setText("");
+                        userSTT = "";
+                        gptTTS = "";
 
-                                                    }
+                    }
 
-                                                    /*
-                                                    else {  //이미 녹음 중이면 녹음 중지
-                                                        recording = false;
-                                                        stopRecord();
-                                                        recordingText.setText("녹음중? NO");
-                                                        // TTS 테스트용으로 녹음 종료시 녹음된걸 말해주는거 넣어둠
-                                                        question = editText.getText().toString();  // 물어본 답변은 저장합니다.
-                                                        // 아이콘을 스피커 모양으로 변경합니다.
-                                                        //recordButton.setImageResource(R.drawable.icon_speak_mmb);
-                                                        answer = true;
-                                                        // ★★★★★★★★★★★★★★★★★★★★★★
-                                                        // 버튼 눌렀을 때 녹음 종료하고 앱 이동할거면 여기에 삽입
-                                                    }
+                    /*
+                    else {  //이미 녹음 중이면 녹음 중지
+                        recording = false;
+                        stopRecord();
+                        recordingText.setText("녹음중? NO");
+                        // TTS 테스트용으로 녹음 종료시 녹음된걸 말해주는거 넣어둠
+                        question = editText.getText().toString();  // 물어본 답변은 저장합니다.
+                        // 아이콘을 스피커 모양으로 변경합니다.
+                        //recordButton.setImageResource(R.drawable.icon_speak_mmb);
+                        answer = true;
+                        // ★★★★★★★★★★★★★★★★★★★★★★
+                        // 버튼 눌렀을 때 녹음 종료하고 앱 이동할거면 여기에 삽입
+                    }
 
-                                                     */
-                                                }
+                     */
+                }
 
 
-                                            }
+            }
         }
         );
         /* TTS  */
@@ -192,63 +189,6 @@ public class ActMmbActivity extends Activity {
             }
         });
         //////////////////////////////////////////////
-        kakaoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 카카오톡 앱을 열기 위한 인텐트 생성
-                Intent intent = getPackageManager().getLaunchIntentForPackage("com.kakao.talk");
-                if (intent != null) {
-                    // 카카오톡 앱이 설치되어 있는 경우 앱을 엽니다.
-                    startActivity(intent);
-                    sendMessage();
-                } else {
-                    // 카카오톡 앱이 설치되어 있지 않은 경우 마켓으로 이동합니다.
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.kakao.talk"));
-                    startActivity(intent);
-                }
-
-            }
-        });
-
-        alarmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_LAUNCHER);
-                intent.setComponent(new ComponentName("com.sec.android.app.clockpackage", "com.sec.android.app.clockpackage.ClockPackage"));
-                startActivity(intent);
-            }
-        });
-
-        coupangButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // 쿠팡 앱을 열기 위한 인텐트 생성
-                Intent intent = getPackageManager().getLaunchIntentForPackage("com.coupang.mobile");
-                if (intent != null) {
-                    // 쿠팡 앱이 설치되어 있는 경우 앱을 엽니다.
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                } else {
-                    // 쿠팡 앱이 설치되어 있지 않은 경우 마켓으로 이동합니다.
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.coupang.mobile"));
-                    startActivity(intent);
-                }
-
-                 /*
-                String packageName = "com.coupang.mobile"; // 패키지 이름을 여기에 적용하세요
-
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
-                    intent.setPackage("com.android.vending"); // 구글 플레이 스토어 앱을 사용하여 열도록 지정
-                    startActivity(intent);
-                } catch (ActivityNotFoundException e) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
-                    startActivity(intent);
-                }*/
-            }
-        });
 
 
         // 접근성 서비스 관련
