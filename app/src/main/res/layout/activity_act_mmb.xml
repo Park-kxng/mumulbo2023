@@ -74,6 +74,13 @@
             android:textColor="@color/grey"
             android:textSize="24sp" />
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="물어보지 않고 안내만 받고 싶으면 바로 카카오톡으로 이동하세요!"
+            android:textColor="@color/grey" />
+
         <EditText
             android:id="@+id/sttEditText"
             android:layout_width="match_parent"
