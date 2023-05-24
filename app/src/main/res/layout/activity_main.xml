@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="10sp"
-
+            android:visibility="invisible"
             android:text="박근영 test _ 다른 앱 접근" />
 
         <Button
@@ -110,6 +110,7 @@
             android:layout_height="87dp"
             android:layout_weight="1"
             android:text="박소현 test _ 플로팅뷰"
+            android:visibility="invisible"
             android:textSize="10sp" />
     </LinearLayout>
 </LinearLayout>

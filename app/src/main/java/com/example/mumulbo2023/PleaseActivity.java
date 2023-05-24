@@ -1,4 +1,6 @@
 package com.example.mumulbo2023;
+import static com.example.mumulbo2023.MainActivity.personArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -63,13 +65,30 @@ public class PleaseActivity extends Activity {
                 // 전송 메시지: [ + <사용자 이름> + 님의 원격접속 해결 요청] + 요구사항 + 팀뷰어 다운로드 링크 + 사용자 퀵서포트 ID
 
                 // 우선 테스트하려고 하드코딩 해놓음
-                String phoneNo = "01095033866"; // 소현이 번호
+                //String phoneNo = "01095033866"; // 소현이 번호
 
-                String sms1 = "[정유진님의 원격접속 해결 요청]\n" + request +  "\n 파트너 ID: 1 794 040 464";
+                //String sms1 = "[정유진님의 원격접속 해결 요청]\n" + request +  "\n 파트너 ID: 1 893 172 444";
+                String sms1 = "[정유진님의 원격접속 해결 요청]\n 파트너 ID: 1 893 172 444";
                 String sms2 = "https://www.teamviewer.com/ko/download/";
+                
+                // 연락처 저장해둔 곳에서 번호 가져와서 보냄
+                for(int i=0; i < personArrayList.size(); i++){
 
-                sendMsg(phoneNo, sms1);
-                sendMsg(phoneNo, sms2);
+                    sendMsg(personArrayList.get(i).getPerson_number(), sms1);
+                    sendMsg(personArrayList.get(i).getPerson_number(), request);
+                    sendMsg(personArrayList.get(i).getPerson_number(), sms2);
+                }
+                //sendMsg(phoneNo, sms1);
+                //sendMsg(phoneNo, sms2);
+
+                Intent intent = getPackageManager().getLaunchIntentForPackage("com.teamviewer.quicksupport.market");
+                if (intent != null) {
+                    startActivity(intent);
+                } else {
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.teamviewer.quicksupport.market"));
+                    startActivity(intent);
+                }
+
             }
         });
     }
