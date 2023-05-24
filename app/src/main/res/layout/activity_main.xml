@@ -50,7 +50,7 @@
             android:background="@drawable/button_style_round"
             android:elevation="30dp"
             android:padding="15dp"
-            android:text="무물보에게 맡기기"
+            android:text="무물보에게 안내받기"
             android:textColor="@color/grey"
             android:textSize="20sp"
             android:onClick="onClickAct"

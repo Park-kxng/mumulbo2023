@@ -7,7 +7,16 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".PleaseActivity">
-
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey"
+        android:fontFamily="@font/bold"
+        android:text="다른 사람에게 부탁하기"
+        android:textAlignment="center"
+        android:textColor="@color/background"
+        android:textSize="28sp" />
     <ImageView
         android:id="@+id/charc_mmb"
         android:layout_width="255dp"
