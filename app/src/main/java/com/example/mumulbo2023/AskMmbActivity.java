@@ -122,7 +122,8 @@ public class AskMmbActivity extends Activity {
                         recording = true;
                         startRecord();
                         Toast.makeText(getApplicationContext(), "지금부터 무엇이든 물어보세요!", Toast.LENGTH_SHORT).show();
-                        recordingText.setText("녹음중? YES");
+                        recordingText.setText("녹음 중입니다!");
+                        recordingText.setText("");
                         // 캐릭터의 얼굴을 무표정 얼굴로 변경합니다.
                         faceImage.setImageResource(R.drawable.character_mmb);
 

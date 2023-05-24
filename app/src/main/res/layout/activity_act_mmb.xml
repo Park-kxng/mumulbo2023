@@ -58,7 +58,7 @@
             android:ems="10"
             android:fontFamily="@font/medium"
             android:inputType="textPersonName"
-            android:text="2단계. STT 인식 부분"
+            android:text="2단계. 안내 받기(STT 인식 부분)"
             android:textColor="@color/grey"
             android:textSize="24sp" />
 
@@ -88,11 +88,18 @@
         <TextView
             android:id="@+id/infoTextView"
             android:layout_width="match_parent"
-            android:layout_height="9dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/medium"
-            android:text="다른 앱 열기 테스트 버튼"
-            android:textColor="@color/grey" />
+            android:text="3단계. 완료"
+            android:textColor="@color/grey"
+            android:textSize="24sp" />
+        <Button
+            android:id="@+id/complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="완료"
+            android:contentDescription="완료" />
 
         <Button
             android:id="@+id/alarmButton"

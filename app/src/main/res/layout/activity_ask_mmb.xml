@@ -9,14 +9,6 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_weight="1"
-        android:text="녹음 중? NO"
-        android:textColor="@color/black" />
-
     <ImageView
         android:id="@+id/charc_mmb"
         android:layout_width="255dp"
@@ -28,13 +20,13 @@
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
-        android:layout_height="11dp"
+        android:layout_height="23dp"
         android:layout_marginTop="15dp"
         android:layout_weight="1"
         android:ems="10"
         android:fontFamily="@font/medium"
         android:inputType="text"
-        android:text=""
+        android:text="질문이 표시되는 부분"
         android:textColor="@color/black" />
 
     <TextView
@@ -56,4 +48,12 @@
         android:layout_marginBottom="80dp"
         android:background="@drawable/icon_speak"
         android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_weight="1"
+        android:text="녹음 중? NO"
+        android:textColor="@color/black" />
 </LinearLayout>

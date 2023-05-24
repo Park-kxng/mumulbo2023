@@ -39,7 +39,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class ActMmbActivity extends Activity {
-    Button kakaoButton, alarmButton, coupangButton, recordButton, button_AccessConect;
+    public int Step = 0;
+    Button kakaoButton, alarmButton, coupangButton, recordButton, button_AccessConect, button_Complete;
     //////
     TextView recordingText; // TTS로 음성으로 나오기도 하지만 텍스트로도 표시하기 위함
     //TextView answerText;
@@ -94,6 +95,19 @@ public class ActMmbActivity extends Activity {
         recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");   //한국어
         //
         button_AccessConect = findViewById(R.id.Acces_connection);
+        button_Complete = findViewById(R.id.complete);
+        // 버튼 클릭 시 설명 메시지 토스트로 출력
+        button_Complete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 내가 구현한 (무물보)ui 요소의 설명하는 코드
+                String buttonDescription = button_Complete.getContentDescription().toString(); // contetnDescription 읽기
+                Toast.makeText(ActMmbActivity.this, buttonDescription, Toast.LENGTH_SHORT).show(); // 출력하기
+                textToSpeech.speak("기능 구현이 완료되었습니다! 다른 기능을 안내받고 싶으시면 무물보에게 언제든 물어봐주세요!", TextToSpeech.QUEUE_FLUSH, null);
+                Step = 0; // Step 초기화
+
+            }
+        });
         recordButton.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
