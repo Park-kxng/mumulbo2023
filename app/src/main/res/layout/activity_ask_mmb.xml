@@ -3,54 +3,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
-    android:gravity="center">
+    android:background="@color/background"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:layout_height="10dp"
         android:layout_weight="1"
-        android:text="녹음 중? NO" />
+        android:text="녹음 중? NO"
+        android:textColor="@color/black" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/charc_mmb"
         android:layout_width="255dp"
         android:layout_height="134dp"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="100dp"
         android:layout_weight="1"
-        android:src ="@drawable/character_mmb" />
+        android:src="@drawable/character_mmb" />
 
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="11dp"
+        android:layout_marginTop="15dp"
         android:layout_weight="1"
-        android:textColor="@color/black"
         android:ems="10"
+        android:fontFamily="@font/medium"
         android:inputType="text"
-        android:text="" />
+        android:text=""
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/speakText"
-        android:layout_width="wrap_content"
-        android:layout_height="15dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="30dp"
         android:layout_weight="1"
+        android:fontFamily="@font/medium"
         android:text="답변이 보이는 부분"
         android:textColor="@color/black"
-        android:textSize="24sp" />
+        android:textSize="14sp" />
 
     <ImageButton
         android:id="@+id/imageButton"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="80dp"
         android:background="@drawable/icon_speak"
         android:scaleType="centerCrop" />
 </LinearLayout>

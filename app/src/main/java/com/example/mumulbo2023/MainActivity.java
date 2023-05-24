@@ -33,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
         Button button_please =  (Button) findViewById(R.id.button_please);
         Button addPersonMenuButton = (Button) findViewById(R.id.addPersonMenuButton);
 
+        Button testPky = (Button) findViewById(R.id.pky_test);
+        Button testPsh = (Button) findViewById(R.id.psh_test);
+
+
+
         // 접근 권한 요청, 권한을 부여할 권한 지정하는 부분
         // Manifest에 퍼미션 추가하고 여기에다가 권한 필요한거 싹다 집어넣으면 된다
         String[] permissions = {
@@ -40,7 +45,11 @@ public class MainActivity extends AppCompatActivity {
                 //android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 //android.Manifest.permission.INTERNET,
                 android.Manifest.permission.RECORD_AUDIO,
-                android.Manifest.permission.SEND_SMS
+                android.Manifest.permission.SEND_SMS,
+                android.Manifest.permission.SET_ALARM,
+                android.Manifest.permission.SYSTEM_ALERT_WINDOW,
+                android.Manifest.permission.FOREGROUND_SERVICE
+
         };
         checkPermissions(permissions); // 권한 허용할 것인지 물어보는 것 부분 함수
 
@@ -92,7 +101,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        testPky.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(getApplicationContext(), PkyTestActivity.class);
+                startActivity(intent);
+            }
+        });
+        testPsh.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(getApplicationContext(), PshTestActivity.class);
+                startActivity(intent);
 
+                finish();
+            }
+        });
     }
 
 
