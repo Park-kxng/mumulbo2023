@@ -101,6 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="10sp"
+
             android:text="박근영 test _ 다른 앱 접근" />
 
         <Button
