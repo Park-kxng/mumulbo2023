@@ -18,7 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class PleaseActivity extends Activity {
-    ImageButton recordButton;
+    ImageButton recordButton, sendButton;
     SpeechRecognizer speechRecognizer;
     Intent recordIntent;
     boolean recording = false;  //현재 녹음중인지 여부
@@ -32,6 +32,7 @@ public class PleaseActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_please);
         recordButton = findViewById(R.id.recordButton);
+        sendButton = findViewById(R.id.sendButton);
         please_request = findViewById(R.id.please_request);
         /* STT  */
         recordIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -51,6 +52,24 @@ public class PleaseActivity extends Activity {
                     please_request.setText("");
                     userSTT = "";
                 }
+            }
+        });
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // 실제로는 내장 DB에서 전송 메시지 내용 가져오기
+                // 전송 메시지: [ + <사용자 이름> + 님의 원격접속 해결 요청] + 요구사항 + 팀뷰어 다운로드 링크 + 사용자 퀵서포트 ID
+
+                // 우선 테스트하려고 하드코딩 해놓음
+                String phoneNo = "01095033866"; // 소현이 번호
+
+                String sms1 = "[정유진님의 원격접속 해결 요청]\n" + request +  "\n 파트너 ID: 1 794 040 464";
+                String sms2 = "https://www.teamviewer.com/ko/download/";
+
+                sendMsg(phoneNo, sms1);
+                sendMsg(phoneNo, sms2);
             }
         });
     }
@@ -160,17 +179,7 @@ public class PleaseActivity extends Activity {
             please_request.setText(userSTT);    //기존의 text에 인식 결과 보여
 
             request = userSTT;
-            // 실제로는 내장 DB에서 전송 메시지 내용 가져오기
-            // 전송 메시지: [ + <사용자 이름> + 님의 원격접속 해결 요청] + 요구사항 + 팀뷰어 다운로드 링크 + 사용자 퀵서포트 ID
 
-            // 우선 테스트하려고 하드코딩 해놓음
-            String phoneNo = "01095033866"; // 소현이 번호
-
-            String sms1 = "[정유진님의 원격접속 해결 요청]\n" + request +  "\n 파트너 ID: 1 794 040 464";
-            String sms2 = "https://www.teamviewer.com/ko/download/";
-
-            sendMsg(phoneNo, sms1);
-            sendMsg(phoneNo, sms2);
 
             recording = false;
 

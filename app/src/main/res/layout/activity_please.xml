@@ -28,11 +28,29 @@
         android:text="예시"
         android:textColor="@color/black" />
 
-    <ImageButton
-        android:id="@+id/recordButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="80dp"
-        android:background="@drawable/icon_speak"
-        android:scaleType="centerCrop" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="104dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        >
+        <ImageButton
+            android:id="@+id/recordButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="80dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/icon_speak"
+            android:scaleType="centerCrop" />
+        <ImageButton
+            android:id="@+id/sendButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="80dp"
+            android:layout_marginleft="20dp"
+            android:background="@drawable/check"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
 </LinearLayout>
