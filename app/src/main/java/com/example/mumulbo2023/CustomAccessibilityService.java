@@ -15,15 +15,24 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class CustomAccessibilityService extends AccessibilityService {
     int Step = 0;
+    // 단계별 동작을 저장하기 위한 배열을 선언합니다.
+    Map<Integer, String> ActionsOfKakao= new HashMap<>(); // 단계 저장
+    Map<Integer, String> CommentsOfKakao= new HashMap<>(); // 단계별 코멘트 저장 - 사용자가 잘못 누른 경우 제대로 누르도록 설명해주는 코드
+
+
+
     // TTS 텍스트를 음성으로 관련
     TextToSpeech textToSpeech;
     @Override
     protected void onServiceConnected() {
+
         // 접근성 서비스가 연결되었을 때 호출됩니다.
         Log.e("log1","서비스가 연결되었습니다.");
         Log.d("log1","서비스가 연결되었습니다.");
@@ -88,60 +97,54 @@ public class CustomAccessibilityService extends AccessibilityService {
 
         }
         // TTS를 사용하고 싶다면 아래 한줄만 사용하면 됨. 매개변수 제일 첫번째에 String 말할거 넣으면 됨.
-        //textToSpeech.speak(packageName, TextToSpeech.QUEUE_FLUSH, null);
+        //textToSpeech.speak("말할 부분", TextToSpeech.QUEUE_FLUSH, null);
 
-        //3.내가 지금 실행하고 있는 패키지가 카카오톡인 경우
+        // 3.내가 지금 실행하고 있는 패키지가 카카오톡인 경우
         if("com.kakao.talk".equals(packageName)){
             // 예시. 친구 추가하기 버튼을 찾는 로직을 구현할 예정
-            Log.d("log3","룰루랄라");
+            Log.d("log3","카카오톡에서 실행 중!");
+            AddDataToKaKao(); // 카카오톡 관련 데이터를 추가합니다.
+            Step = 1;
+
+            // 내가 원하는 버튼 찾기 (미완료)
             sourceNode = event.getSource();
             if (sourceNode != null) {
                 Log.d("log3-2","친구추가 버튼 누르기");
-
                 // 카카오톡이 클릭되었을 때의 동작을 여기에 구현
                 performFriendAddAction(sourceNode);
             }
 
-            // 클릭하면 실행되는 함수
+            // 클릭하면 실행되는 함수 (진행 중)
             if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
                 // 클릭한 내용의 contentDescription을 읽는다.
                 CharSequence text = event.getContentDescription();
                 if (text == null) {
                     Log.d("log2-1", "내용이 없습니다.");
+                    textToSpeech.speak("인식할 수 있는 내용이 없습니다.", TextToSpeech.QUEUE_FLUSH, null);
                 }
                 else {
                     String textToString = text.toString();
                     Log.d("log2-1", text.toString());
-                    textToSpeech.speak(textToString, TextToSpeech.QUEUE_FLUSH, null);
-                    // 친구한테 카톡 보내기 1단계
-                    if(Step==0){
-                        if(textToString.contains("친구 탭")){
-                            // 친구한테 카톡보내기 로직 실행
-                            Log.d("log2-2", "친구한테 카톡 보내기 : 1단계");
-                            textToSpeech.speak("친구한테 카톡 보내기 : 1단계", TextToSpeech.QUEUE_FLUSH, null);
-                            Step = 1;
-                        }
-                        else{
-                            Log.d("log2-2", "친구 목록을 확인하기 위해 가장 아래에 있는 사람 모양의 아이콘을 눌러주세요.");
-                        }
-                    }
-                    // 친구한테 카톡 보내기 2단계
-                    else if(Step == 1){
-                        if(textToString.contains("검색")){
-                            // 친구한테 카톡보내기 로직 실행
-                            Log.d("log2-2", "친구한테 카톡 보내기 : 2단계");
-                            Step = 2;
-                        }
-                        else{
-                            Log.d("log2-2", "보낼 친구를 검색하기 위해 검색하기 위해 가장 윗부분에 돋보기 버튼을 눌려주세요");
-                        }
+                    // 단계에 따라 동작을 안내하는 알고리즘
+                    switch (Step) {
+                        case 1:
+                            if(textToString.contains("친구 탭")){// 친구한테 카톡보내기 로직 실행
+                                PrintLog(packageName,Step,1);
+                                Step = 1;
+                            }
+                            else{PrintLog(packageName,Step,0);}
+                            break;
+                        case 2:
+                            if(textToString.contains("검색")){// 친구한테 카톡보내기 로직 실행
+                                PrintLog(packageName,Step,0);
+                                Step = 2;
+                            }
+                            else{PrintLog(packageName,Step,1);}
+                            break;
+                        default:
+                            // 모든 case에 해당하지 않을 때 실행되는 코드 블록
                     }
                 }
-
-
-
-
-
             }
             // ▲ 위는 클릭했을 때 어떤 것인지 log 찍는 것
 
@@ -181,6 +184,44 @@ public class CustomAccessibilityService extends AccessibilityService {
             }
         }*/
     }
+
+    private void PrintLog(String packageName,int Step, int Action){
+        // 로그와 TTS를 실행하는 함수
+        // input : 현재 패키지, 단계, 액션 올바르게 했는지 여부
+        if(Action == 1){
+            // 올바른 액션을 취한 경우
+            Log.d(packageName, Step+"단계 :"+ActionsOfKakao.get(Step));
+            textToSpeech.speak(Step+"단계 :" + ActionsOfKakao.get(Step+1), TextToSpeech.QUEUE_FLUSH, null);
+        }
+        else if(Action == 0){
+            // 바르지 못한 액션을 취한 경우
+            Log.d(packageName, Step+"단계 실행 실패 :"+ActionsOfKakao.get(Step));
+            textToSpeech.speak(Step+"단계 :" + CommentsOfKakao.get(Step), TextToSpeech.QUEUE_FLUSH, null);
+        }
+
+
+    }
+
+    private void AddDataToKaKao(){
+        // 카카오 관련 데이터를 추가하는 함수
+        ActionsOfKakao.put(1, "채팅 탭");
+        CommentsOfKakao.put(1, "친구 목록을 확인하기 위해 가장 아래에 있는 사람 모양의 아이콘을 눌러주세요");
+
+        ActionsOfKakao.put(2, "검색 버튼");
+        CommentsOfKakao.put(2, "보낼 친구를 검색하기 위해 검색하기 위해 가장 윗부분에 돋보기 버튼을 눌려주세요");
+
+        ActionsOfKakao.put(3, "친구 클릭");
+        CommentsOfKakao.put(3, "");
+
+        ActionsOfKakao.put(4, "플러스 버튼");
+        CommentsOfKakao.put(4, "");
+
+        ActionsOfKakao.put(5, "사진 클릭");
+        CommentsOfKakao.put(5, "");
+
+        ActionsOfKakao.put(6, "전송 버튼");
+        CommentsOfKakao.put(6, "");
+    }
     private void performFriendAddAction(AccessibilityNodeInfo rootNode) {
         // 친구 추가하기 버튼을 찾는 로직
         AccessibilityNodeInfo addButton = findFriendAddButton(rootNode);
@@ -192,7 +233,6 @@ public class CustomAccessibilityService extends AccessibilityService {
             addButton.performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
     }
-
     private AccessibilityNodeInfo findFriendAddButton(AccessibilityNodeInfo node) {
         //특정 버튼을 찾는 알고리즘 (구현 미완료)
         if (node.getClassName().equals("android.widget.Button")) {
@@ -215,14 +255,11 @@ public class CustomAccessibilityService extends AccessibilityService {
             }
         return null;
     }
-
-
     @Override
     public void onInterrupt() {
         Log.e("log3","접근성 이벤트 중단");
         // 접근성 서비스가 중단되었을 때 호출됩니다.
     }
-
     private void traverseNode(AccessibilityNodeInfo node) {
         if (node == null) {
             return;
@@ -242,8 +279,6 @@ public class CustomAccessibilityService extends AccessibilityService {
             childNode.recycle();
         }
     }
-
-
     public void performClickAtCoordinates(int x, int y) {
         Path path = new Path();
         path.moveTo(x, y);

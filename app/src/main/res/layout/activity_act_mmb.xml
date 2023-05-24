@@ -2,84 +2,127 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="무물보에게 부탁하기" />
-
-    <TextView
-        android:id="@+id/recordingNowTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="녹음중? NO" />
+        android:fontFamily="@font/bold"
+        android:text="무물보에게 부탁하기"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/infoTextView2"
+            android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="1. 접근성 서비스 연결 ▶" />
+            android:fontFamily="@font/medium"
+            android:text="1단계. 접근성 서비스 연결"
+            android:textColor="@color/grey"
+            android:textSize="24sp" />
 
-        <Button
-            android:id="@+id/Acces_connection"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="접근성 서비스 연결하기" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/Acces_connection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button_style_round2"
+                android:fontFamily="@font/medium"
+                android:text="접근성 서비스 연결하기"
+                android:textColor="@color/background" />
+        </LinearLayout>
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/sttEditText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="2. STT 인식 부분" />
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/sttButton"
+        <EditText
+            android:id="@+id/sttEditText"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:ems="10"
+            android:fontFamily="@font/medium"
+            android:inputType="textPersonName"
+            android:text="2단계. STT 인식 부분"
+            android:textColor="@color/grey"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/recordingNowTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/medium"
+            android:text="녹음중? NO"
+            android:textColor="@color/grey" />
+
+        <Button
+            android:id="@+id/sttButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_style_round2"
+            android:fontFamily="@font/medium"
+            android:text="STT Button(눌러서 물어보기)"
+            android:textColor="@color/background" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="STT Button(눌러서 물어보기)" />
+        android:layout_height="239dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/infoTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="다른 앱 열기 테스트 버튼" />
+        <TextView
+            android:id="@+id/infoTextView"
+            android:layout_width="match_parent"
+            android:layout_height="9dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/medium"
+            android:text="다른 앱 열기 테스트 버튼"
+            android:textColor="@color/grey" />
 
-    <Button
-        android:id="@+id/kakaoButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="카카오톡 연결" />
+        <Button
+            android:id="@+id/alarmButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_style_round2"
+            android:fontFamily="@font/medium"
+            android:text="알람 연결"
+            android:textColor="@color/background" />
 
-    <Button
-        android:id="@+id/alarmButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="알람 연결" />
+        <Button
+            android:id="@+id/coupangButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_style_round2"
+            android:fontFamily="@font/medium"
+            android:text="쿠팡 연결"
+            android:textColor="@color/background" />
 
-    <Button
-        android:id="@+id/coupangButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="쿠팡 연결" />
+        <Button
+            android:id="@+id/kakaoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_style_round2"
+            android:fontFamily="@font/medium"
+            android:text="카카오톡 연결"
+            android:textColor="@color/background" />
+    </LinearLayout>
+
 </LinearLayout>
