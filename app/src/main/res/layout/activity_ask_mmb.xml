@@ -33,7 +33,7 @@
         android:layout_weight="1"
         android:ems="10"
         android:fontFamily="@font/medium"
-        android:inputType="text"
+        android:inputType="textMultiLine"
         android:text="질문이 표시되는 부분"
         android:textColor="@color/black" />
 
