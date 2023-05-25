@@ -2,6 +2,8 @@ package com.example.mumulbo2023;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import static com.example.mumulbo2023.MainActivity.Step;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -37,9 +39,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import static com.example.mumulbo2023.MainActivity.Step;
+import static com.example.mumulbo2023.MainActivity.hello;
 
 public class ActMmbActivity extends Activity {
-    public int Step = 0;
+
     Button recordButton, button_AccessConect, button_Complete;
     //////
     TextView recordingText; // TTS로 음성으로 나오기도 하지만 텍스트로도 표시하기 위함
@@ -110,7 +114,13 @@ public class ActMmbActivity extends Activity {
             public void onClick(View v) {
                 System.out.println("버튼을 클릭하였습니다.");
                 System.out.println(answer);
-
+                System.out.println(Step);
+                hello = 1;
+                if(hello == 1){
+                    // 처음 시작하는 경우
+                    Step  = 1;
+                    System.out.println(Step);
+                }
                 // answer == true -> 음성봇이 말해야 하는 경우
                 if (answer == true) { // 챗 지피티 답변 시작
                     /*
@@ -196,7 +206,7 @@ public class ActMmbActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // 접근성 서비스 연결하기 버튼을 누른 경우
-
+                Step = 0;
                 // 접근성 서비스가 활성화되어 있는 경우
                 if (isAccessibilityServiceEnabled()) {
                     // 접근성 서비스를 시작한다.

@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     // 연락처는 여기에서 관리됨. static으로 여러곳에서 접근.
     public static ArrayList<OnePerson> personArrayList;
     public static int Step;
+    public static int hello;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

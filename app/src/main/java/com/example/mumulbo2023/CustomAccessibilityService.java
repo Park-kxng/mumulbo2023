@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import static com.example.mumulbo2023.MainActivity.Step;
+import static com.example.mumulbo2023.MainActivity.hello;
+
 
 
 public class CustomAccessibilityService extends AccessibilityService {
@@ -48,7 +50,6 @@ public class CustomAccessibilityService extends AccessibilityService {
         // 접근성 서비스가 연결되었을 때 호출됩니다.
         Log.e("log1","서비스가 연결되었습니다.");
         Log.d("log1","서비스가 연결되었습니다.");
-        Step = 0;
 
         AccessibilityServiceInfo info = new AccessibilityServiceInfo();
         info.eventTypes = AccessibilityEvent.TYPE_VIEW_CLICKED | AccessibilityEvent.TYPE_VIEW_LONG_CLICKED;
@@ -121,8 +122,11 @@ public class CustomAccessibilityService extends AccessibilityService {
             // 아무거나 다 클릭했을 때 실행해야 하는 함수
             // 클릭한 내용의 contentDescription을 읽는다.
             CharSequence text = event.getContentDescription();
+
             if(text == null){ textToString = "내용이 없습니다.";} // 내용이 없는 경우 -> 내용이 없습니다.
             else {textToString = text.toString();} // 내용이 있는 경우 -> 저장
+
+
 
         }
         // 3.내가 지금 실행하고 있는 패키지가 카카오톡인 경우
@@ -130,10 +134,7 @@ public class CustomAccessibilityService extends AccessibilityService {
             // 예시. 친구 추가하기 버튼을 찾는 로직을 구현할 예정
             Log.d("log3","카카오톡에서 실행 중!");
             AddDataToKaKao(); // 카카오톡 관련 데이터를 추가합니다ㅏ.
-            if(Step == 0){
-                // 처음 시작하는 경우
-                Step  = 1;
-            }
+
             // 내가 원하는 버튼 찾기 (미완료)
 //            sourceNode = event.getSource();
 //            if (sourceNode != null) {
@@ -150,8 +151,63 @@ public class CustomAccessibilityService extends AccessibilityService {
                 if(text == null){ textToString = "내용이 없습니다.";} // 내용이 없는 경우 -> 내용이 없습니다.
                 else {textToString = text.toString();} // 내용이 있는 경우 -> 저장
                 Log.d("log2-1(클릭-컨텐츠 출력) : ", textToString);
-
+                if(hello !=1){Step = 0;}
                 // 단계에 따라 동작을 안내하는 알고리즘
+                if(Step ==0){
+                    Log.d("2-2:","Step is 0");
+
+                    if(textToString.contains("채팅 탭")){
+                        HelloTTS("대화목록을 확인할 수 있는 버튼입니다.");
+                        Log.d("2-2:",textToString);
+                    }
+                    else if (textToString.contains("친구")) {
+                        HelloTTS("카카오톡 친구를 확인할 수 있는 버튼입니다.");
+                        Log.d("2-2:",textToString);
+
+                    }
+                    else if (textToString.contains("뷰 탭")) {
+                        HelloTTS("카카오톡 뷰를 확인할 수 있는 버튼입니다.");
+                        Log.d("2-2:",textToString);
+
+                    }
+                    else if (textToString.contains("쇼핑 탭")) {
+                        HelloTTS("카카오톡 쇼핑를 확인할 수 있는 버튼입니다.");
+                        Log.d("2-2:",textToString);
+
+                    }
+                    else if (textToString.contains("더보기 탭")) {
+                        HelloTTS("카카오톡에서 제공하는 다른 다양한 기능들을 확인할 수 있는 버튼입니다. 설정이나 카카오톡 송금이나 지갑 등의 기능을 사용할 수 있습니다");
+                        Log.d("2-2:",textToString);
+
+                    }
+                    else if (textToString.contains("검색")) {
+                        HelloTTS("카카오톡 친구를 검색할 수 있는 버튼입니다. 친구를 찾거나 추가해보세요!");
+                        Log.d("2-2:",textToString);
+
+                    }
+                    else if (textToString.contains("쇼핑 탭")) {
+                        HelloTTS("카카오톡 쇼핑를 확인할 수 있는 버튼입니다.");
+                        Log.d("2-2:",textToString);
+
+                    }
+                    else if (textToString.contains("친구 추가")) {
+                        HelloTTS("친구를 추가할 수 있는 버튼입니다. QR코드,연락처,id,추천친구를 이용하여 다양한 카카오톡 친구를 추가해보세요");
+                        Log.d("2-2:",textToString);
+
+                    }
+                    else if (textToString.contains("옵션 더보기")) {
+                        HelloTTS("카카오톡 친구를 편집하고 관리할 수 있는 버튼입니다.");
+                        Log.d("2-2:",textToString);
+
+                    }
+                    else if (textToString.contains("톡뮤직")) {
+                        HelloTTS("카카오톡에서 제공하는 톡뮤직을 사용할 수 있는 버튼입니다. 친구의 프로필 뮤직을 목록으로 보여줘요. 친구들이 좋아하는 신나는 노래를 들어볼까요?");
+                        Log.d("2-2:",textToString);
+
+                    }
+
+
+                }
                     switch (Step) {
                         case 1:
                             if(textToString.contains(ActionsOfKakao.get(Step))){// 친구한테 카톡보내기 로직 실행
