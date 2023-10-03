@@ -77,7 +77,7 @@ public class AskMmbActivity extends Activity {
             .readTimeout(60, TimeUnit.SECONDS)
             .build();
 
-    private static final String MY_SECRET_KEY = "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";
+    private static final String MY_SECRET_KEY = "";
     private Context context;
 
     @Override
