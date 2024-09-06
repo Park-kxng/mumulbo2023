@@ -13,8 +13,9 @@
 - 프로젝트 지속기간 : 2023.04 - 2023.05
 - 개발 엔진 및 언어 : Android & Java
 - 멤버 : 팀 무물보 (00대학교 IT공학전공 20학번 정유진,박소현,박근영)
-  
-![001](https://github.com/Park-kxng/mumulbo2023/assets/114843604/44f7861a-0ee6-4591-9f94-d3b08598058e)
+
+
+![272258962-44f7861a-0ee6-4591-9f94-d3b08598058e](https://github.com/user-attachments/assets/91db4be7-586f-4402-b89e-f1f9f703f9ec)
 
 
 ## 프로젝트 배경
